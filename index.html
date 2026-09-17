@@ -1,0 +1,924 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Aura Lifestyle | Affordable Chic & Aesthetic Essentials Pakistan</title>
+    <meta name="description" content="Shop aesthetic jewelry, trendy fashion accessories, beauty tools, bags, and cute lifestyle gifts across Pakistan. Cash on delivery available nationwide.">
+    
+    <!-- Favicon -->
+    <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>✨</text></svg>">
+
+    <!-- Stylesheets -->
+    <link rel="stylesheet" href="css/style.css">
+    
+    <!-- FontAwesome Icons for crisp UI icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <!-- Supabase JS Client CDN -->
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+</head>
+<body>
+
+    <!-- ==============================================================================
+         1. TOP ANNOUNCEMENT BAR
+         ============================================================================== -->
+    <div class="top-bar">
+        <div class="container top-bar-inner">
+            <div class="top-bar-marquee">
+                <span>🇵🇰 <strong>CASH ON DELIVERY</strong> AVAILABLE ALL OVER PAKISTAN</span>
+                <span>•</span>
+                <span>🎉 FREE SHIPPING ON ORDERS OVER <strong>RS. 2,499</strong></span>
+                <span>•</span>
+                <span class="top-bar-highlight">USE CODE: <strong>AURA10</strong> FOR 10% OFF</span>
+            </div>
+        </div>
+    </div>
+
+    <!-- ==============================================================================
+         2. MAIN NAVIGATION BAR
+         ============================================================================== -->
+    <header class="navbar" id="navbar">
+        <div class="container nav-container">
+            <!-- Brand Logo -->
+            <a href="#home" class="brand-logo" onclick="app.showSection('home')">
+                <div>
+                    <div class="brand-logo-text">AURA<span>.</span></div>
+                    <span class="brand-tagline">LIFESTYLE PK</span>
+                </div>
+            </a>
+
+            <!-- Navigation Links -->
+            <nav>
+                <ul class="nav-links">
+                    <li><a href="#home" class="nav-link active" onclick="app.showSection('home')">Home</a></li>
+                    <li><a href="#shop" class="nav-link" onclick="app.showSection('shop')">Shop All</a></li>
+                    <li><a href="#categories" class="nav-link" onclick="app.scrollToCategories()">Categories</a></li>
+                    <li><a href="#new" class="nav-link" onclick="app.filterByBadge('new')">New Arrivals</a></li>
+                    <li><a href="#sale" class="nav-link nav-link-sale" onclick="app.filterByBadge('sale')">Sale %</a></li>
+                    <li><a href="#about" class="nav-link" onclick="app.showSection('about')">About Us</a></li>
+                    <li><a href="#contact" class="nav-link" onclick="app.showSection('contact')">Contact</a></li>
+                </ul>
+            </nav>
+
+            <!-- Search & Action Icons -->
+            <div class="nav-actions">
+                <!-- Live Search Bar -->
+                <div class="nav-search-box">
+                    <i class="fa-solid fa-magnifying-glass nav-search-icon"></i>
+                    <input type="text" id="nav-search-input" class="nav-search-input" placeholder="Search jewelry, tote bags, scrunchies..." oninput="app.handleSearch(this.value)">
+                </div>
+
+                <!-- Wishlist Trigger -->
+                <button class="icon-btn" onclick="app.toggleWishlistDrawer(true)" title="Wishlist" aria-label="Wishlist">
+                    <i class="fa-regular fa-heart"></i>
+                    <span class="count-badge" id="wishlist-count-badge">0</span>
+                </button>
+
+                <!-- Cart Drawer Trigger -->
+                <button class="icon-btn" onclick="app.toggleCartDrawer(true)" title="Shopping Cart" aria-label="Cart">
+                    <i class="fa-solid fa-bag-shopping"></i>
+                    <span class="count-badge" id="cart-count-badge">0</span>
+                </button>
+
+                <!-- User Account / Login Trigger -->
+                <button class="icon-btn" id="nav-auth-btn" onclick="app.handleAuthButtonClick()" title="Account" aria-label="Account">
+                    <i class="fa-regular fa-user"></i>
+                </button>
+
+                <!-- Admin Link (Discrete) -->
+                <a href="admin.html" class="icon-btn" title="Admin Portal" aria-label="Admin Portal" style="font-size: 0.95rem; color: var(--text-light);">
+                    <i class="fa-solid fa-lock"></i>
+                </a>
+
+                <!-- Mobile Menu Toggle Button -->
+                <button class="icon-btn hamburger-btn" onclick="app.toggleMobileNav(true)" aria-label="Open Menu">
+                    <i class="fa-solid fa-bars"></i>
+                </button>
+            </div>
+        </div>
+    </header>
+
+    <!-- ==============================================================================
+         3. MOBILE NAVIGATION DRAWER
+         ============================================================================== -->
+    <div class="drawer-overlay" id="mobile-nav-overlay" onclick="app.toggleMobileNav(false)"></div>
+    <div class="drawer-panel" id="mobile-nav-panel" style="right: auto; left: -100%; max-width: 300px; transition: left 0.35s ease;">
+        <div class="drawer-header">
+            <div class="brand-logo-text">AURA<span>.</span></div>
+            <button class="drawer-close" onclick="app.toggleMobileNav(false)">&times;</button>
+        </div>
+        <div class="drawer-body">
+            <div class="form-group" style="margin-bottom: 15px;">
+                <input type="text" class="form-input" placeholder="Search products..." oninput="app.handleSearch(this.value)">
+            </div>
+            <ul style="list-style: none; display: flex; flex-direction: column; gap: 14px; font-size: 1.05rem; font-weight: 500;">
+                <li><a href="#home" onclick="app.showSection('home'); app.toggleMobileNav(false);">🌸 Home</a></li>
+                <li><a href="#shop" onclick="app.showSection('shop'); app.toggleMobileNav(false);">🛍️ Shop All Products</a></li>
+                <li><a href="#new" onclick="app.filterByBadge('new'); app.toggleMobileNav(false);">✨ New Arrivals</a></li>
+                <li><a href="#sale" onclick="app.filterByBadge('sale'); app.toggleMobileNav(false);" style="color: var(--danger);">🔥 On Sale (Deals)</a></li>
+                <li><a href="#about" onclick="app.showSection('about'); app.toggleMobileNav(false);">📖 About Our Store</a></li>
+                <li><a href="#contact" onclick="app.showSection('contact'); app.toggleMobileNav(false);">📞 Contact & FAQs</a></li>
+                <li style="border-top: 1px solid var(--border-color); padding-top: 14px;"><a href="admin.html">🔐 Admin Panel Login</a></li>
+            </ul>
+        </div>
+    </div>
+
+    <!-- ==============================================================================
+         4. MAIN CONTENT CONTAINER (SECTIONS)
+         ============================================================================== -->
+    <main id="main-content">
+
+        <!-- SECTION: HOME VIEW -->
+        <section id="home-section">
+            <!-- Hero Banner -->
+            <div class="hero-section">
+                <div class="container hero-grid">
+                    <div class="hero-content">
+                        <div class="hero-pill">
+                            <i class="fa-solid fa-sparkles"></i> 100% Authentic & Aesthetic Lifestyle
+                        </div>
+                        <h1 class="hero-title">
+                            Affordable Chic for <br><span class="text-gradient">Everyday Pakistan</span>
+                        </h1>
+                        <p class="hero-description">
+                            Discover thoughtfully curated minimalist jewelry, viral beauty tools, soft silk scrunchies, aesthetic tote bags, and cute lifestyle accessories at student-friendly prices.
+                        </p>
+                        <div class="hero-ctas">
+                            <button class="btn btn-primary btn-lg" onclick="app.showSection('shop')">
+                                <i class="fa-solid fa-bag-shopping"></i> Explore Collection
+                            </button>
+                            <button class="btn btn-light btn-lg" onclick="app.filterByBadge('sale')">
+                                🔥 Under Rs. 999 Steals
+                            </button>
+                        </div>
+                        <div class="hero-stats">
+                            <div class="stat-item">
+                                <h4>10,000+</h4>
+                                <p>Happy Customers</p>
+                            </div>
+                            <div class="stat-item">
+                                <h4>4.9 ★</h4>
+                                <p>Customer Rating</p>
+                            </div>
+                            <div class="stat-item">
+                                <h4>2-4 Days</h4>
+                                <p>Fast Nationwide Delivery</p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Hero Visual / Floating Cards -->
+                    <div class="hero-visual">
+                        <div class="hero-img-wrapper">
+                            <img src="https://images.unsplash.com/photo-1599643478518-a784e5dc4c8f?w=800&auto=format&fit=crop&q=80" alt="Aesthetic Pakistani Jewelry & Lifestyle">
+                            <!-- Floating Tag 1 -->
+                            <div class="floating-tag floating-tag-top">
+                                <span style="font-size: 1.4rem;">🇵🇰</span>
+                                <div>
+                                    <strong style="font-size: 0.82rem; color: var(--secondary);">Cash on Delivery</strong>
+                                    <p style="font-size: 0.72rem; color: var(--text-muted); margin: 0;">Karachi, LHR, ISB & All Cities</p>
+                                </div>
+                            </div>
+                            <!-- Floating Tag 2 -->
+                            <div class="floating-tag floating-tag-bottom">
+                                <span style="font-size: 1.4rem;">💖</span>
+                                <div>
+                                    <strong style="font-size: 0.82rem; color: var(--secondary);">18K Gold Plated</strong>
+                                    <p style="font-size: 0.72rem; color: var(--text-muted); margin: 0;">Tarnish-Resistant & Dainty</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Trust & Perks Strip -->
+            <div class="perks-section">
+                <div class="container perks-grid">
+                    <div class="perk-card">
+                        <div class="perk-icon"><i class="fa-solid fa-truck-fast"></i></div>
+                        <div class="perk-text">
+                            <h4>Cash on Delivery (COD)</h4>
+                            <p>Pay cash right at your doorstep</p>
+                        </div>
+                    </div>
+                    <div class="perk-card">
+                        <div class="perk-icon"><i class="fa-solid fa-gift"></i></div>
+                        <div class="perk-text">
+                            <h4>Free Delivery Rs. 2,499+</h4>
+                            <p>Standard delivery across Pakistan</p>
+                        </div>
+                    </div>
+                    <div class="perk-card">
+                        <div class="perk-icon"><i class="fa-solid fa-shield-heart"></i></div>
+                        <div class="perk-text">
+                            <h4>Quality Guaranteed</h4>
+                            <p>Hand-inspected before dispatch</p>
+                        </div>
+                    </div>
+                    <div class="perk-card">
+                        <div class="perk-icon"><i class="fa-solid fa-rotate-left"></i></div>
+                        <div class="perk-text">
+                            <h4>7-Day Easy Returns</h4>
+                            <p>Hassle-free replacement policy</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Categories Showcase Section -->
+            <section class="categories-section" id="categories-section">
+                <div class="container">
+                    <div class="section-header">
+                        <span class="section-subtitle">Curated Categories</span>
+                        <h2 class="section-title">Explore by Aesthetic</h2>
+                        <p class="section-desc">From daily wearable jewelry to cute desk aesthetics and travel pouches.</p>
+                    </div>
+
+                    <!-- Category Cards Grid -->
+                    <div class="categories-grid" id="home-categories-grid">
+                        <!-- Populated dynamically by app.js -->
+                    </div>
+                </div>
+            </section>
+
+            <!-- Featured Products Section with Tabs -->
+            <section class="products-section">
+                <div class="container">
+                    <div class="section-header">
+                        <span class="section-subtitle">Trending Essentials</span>
+                        <h2 class="section-title">Bestsellers & New Drops</h2>
+                        <p class="section-desc">Handpicked viral favorites loved by Pakistani lifestyle enthusiasts.</p>
+                    </div>
+
+                    <!-- Tab Buttons -->
+                    <div class="tab-nav">
+                        <button class="tab-btn active" onclick="app.setFeaturedTab('all', this)">All Picks</button>
+                        <button class="tab-btn" onclick="app.setFeaturedTab('featured', this)">Featured</button>
+                        <button class="tab-btn" onclick="app.setFeaturedTab('new', this)">New Arrivals</button>
+                        <button class="tab-btn" onclick="app.setFeaturedTab('under999', this)">Under Rs. 999</button>
+                        <button class="tab-btn" onclick="app.setFeaturedTab('sale', this)">On Sale</button>
+                    </div>
+
+                    <!-- Product Grid -->
+                    <div class="products-grid" id="home-products-grid">
+                        <!-- Populated dynamically by app.js -->
+                    </div>
+
+                    <div style="text-align: center; margin-top: 40px;">
+                        <button class="btn btn-outline btn-lg" onclick="app.showSection('shop')">
+                            View All Products (16+) <i class="fa-solid fa-arrow-right"></i>
+                        </button>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Promotional Banner / Coupon Deal -->
+            <div class="container">
+                <div class="promo-strip">
+                    <div class="container promo-grid">
+                        <div class="promo-content">
+                            <span class="promo-highlight-badge">Limited Time Offer</span>
+                            <h3>Spruce Up Your Aesthetic with Flat 10% OFF!</h3>
+                            <p>Use code <strong>AURA10</strong> at checkout on all orders above Rs. 1,000. Free nationwide shipping on orders over Rs. 2,499!</p>
+                            <button class="btn btn-primary" onclick="app.applyPromoAndShop('AURA10')">
+                                Shop With Discount
+                            </button>
+                        </div>
+                        <div>
+                            <div class="promo-coupon-box">
+                                <div>
+                                    <div style="font-size: 0.78rem; color: #CBD5E1; text-transform: uppercase;">Coupon Code</div>
+                                    <div class="coupon-code-tag">AURA10</div>
+                                </div>
+                                <button class="btn btn-light btn-sm" onclick="app.copyCoupon('AURA10')">
+                                    <i class="fa-regular fa-copy"></i> Copy Code
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Customer Reviews / Testimonials -->
+            <section class="products-section" style="background: var(--bg-alt); padding: 50px 0;">
+                <div class="container">
+                    <div class="section-header">
+                        <span class="section-subtitle">Real Love</span>
+                        <h2 class="section-title">What Our Customers Say</h2>
+                    </div>
+
+                    <div class="perks-grid" style="grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));">
+                        <div class="category-card" style="text-align: left; padding: 24px;">
+                            <div style="color: var(--accent-gold); margin-bottom: 8px;">★★★★★</div>
+                            <p style="font-size: 0.9rem; color: var(--text-main); margin-bottom: 12px; font-style: italic;">
+                                "The gold pearl necklace looks even prettier in person! Wore it to university every day this week and no tarnishing at all. Delivery to Lahore took only 2 days."
+                            </p>
+                            <strong style="font-size: 0.85rem; color: var(--secondary);">— Ayesha Khan (Lahore)</strong>
+                        </div>
+                        <div class="category-card" style="text-align: left; padding: 24px;">
+                            <div style="color: var(--accent-gold); margin-bottom: 8px;">★★★★★</div>
+                            <p style="font-size: 0.9rem; color: var(--text-main); margin-bottom: 12px; font-style: italic;">
+                                "Ordered the satin scrunchies and Gua Sha set for my sister's birthday gift. The packaging was so aesthetic and COD made it so easy. Will definitely order again!"
+                            </p>
+                            <strong style="font-size: 0.85rem; color: var(--secondary);">— Fatima Zahra (Karachi)</strong>
+                        </div>
+                        <div class="category-card" style="text-align: left; padding: 24px;">
+                            <div style="color: var(--accent-gold); margin-bottom: 8px;">★★★★★</div>
+                            <p style="font-size: 0.9rem; color: var(--text-main); margin-bottom: 12px; font-style: italic;">
+                                "The corduroy tote bag fits my 13-inch laptop and water bottle effortlessly. Amazing quality for Rs. 1,650! TCS delivery was super quick to Islamabad."
+                            </p>
+                            <strong style="font-size: 0.85rem; color: var(--secondary);">— Maryam Tariq (Islamabad)</strong>
+                        </div>
+                    </div>
+                </div>
+            </section>
+        </section>
+
+        <!-- SECTION: SHOP CATALOG VIEW -->
+        <section id="shop-section" style="display: none;">
+            <div class="container">
+                <div class="shop-page-layout">
+                    <!-- Filter Sidebar -->
+                    <aside class="filter-sidebar">
+                        <div class="filter-title">
+                            <span>Filters</span>
+                            <button class="btn-remove-item" onclick="app.resetAllFilters()">Reset All</button>
+                        </div>
+
+                        <!-- Search in Shop -->
+                        <div class="filter-group">
+                            <label class="form-label">Search Keyword</label>
+                            <input type="text" id="shop-search-input" class="form-input" placeholder="e.g. Ring, Bag, Pink..." oninput="app.handleSearch(this.value)">
+                        </div>
+
+                        <!-- Categories Filter -->
+                        <div class="filter-group">
+                            <h4 class="filter-title">Categories</h4>
+                            <div class="filter-options" id="filter-category-options">
+                                <!-- Populated dynamically by app.js -->
+                            </div>
+                        </div>
+
+                        <!-- Price Range Filter -->
+                        <div class="filter-group">
+                            <h4 class="filter-title">Max Price (PKR)</h4>
+                            <input type="range" id="price-slider" class="price-range-slider" min="400" max="3000" step="50" value="3000" oninput="app.handlePriceFilter(this.value)">
+                            <div class="price-range-labels">
+                                <span>Rs. 400</span>
+                                <span id="price-slider-value" style="font-weight: 700; color: var(--primary);">Rs. 3,000</span>
+                            </div>
+                        </div>
+
+                        <!-- Stock & Sale Filters -->
+                        <div class="filter-group">
+                            <h4 class="filter-title">Availability & Deals</h4>
+                            <div class="filter-options">
+                                <label class="filter-checkbox">
+                                    <input type="checkbox" id="filter-instock" onchange="app.handleFilterChange()">
+                                    <span>In Stock Only</span>
+                                </label>
+                                <label class="filter-checkbox">
+                                    <input type="checkbox" id="filter-sale" onchange="app.handleFilterChange()">
+                                    <span>On Sale / Discounted</span>
+                                </label>
+                                <label class="filter-checkbox">
+                                    <input type="checkbox" id="filter-featured" onchange="app.handleFilterChange()">
+                                    <span>Featured Products</span>
+                                </label>
+                            </div>
+                        </div>
+                    </aside>
+
+                    <!-- Product Grid Area -->
+                    <div>
+                        <!-- Toolbar -->
+                        <div class="catalog-toolbar">
+                            <div style="font-size: 0.9rem; color: var(--text-muted);">
+                                Showing <strong id="catalog-count-display" style="color: var(--secondary);">0</strong> products
+                            </div>
+                            <div style="display: flex; align-items: center; gap: 8px;">
+                                <label for="catalog-sort" style="font-size: 0.85rem; font-weight: 500;">Sort By:</label>
+                                <select id="catalog-sort" class="catalog-sort-select" onchange="app.handleSortChange(this.value)">
+                                    <option value="newest">Newest Arrivals</option>
+                                    <option value="price-asc">Price: Low to High</option>
+                                    <option value="price-desc">Price: High to Low</option>
+                                    <option value="rating">Top Customer Rated</option>
+                                    <option value="name">Name (A-Z)</option>
+                                </select>
+                            </div>
+                        </div>
+
+                        <!-- Products Grid -->
+                        <div class="products-grid" id="catalog-products-grid">
+                            <!-- Populated dynamically by app.js -->
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- SECTION: ABOUT US -->
+        <section id="about-section" style="display: none; padding: 60px 0;">
+            <div class="container" style="max-width: 800px;">
+                <div class="section-header">
+                    <span class="section-subtitle">Our Story</span>
+                    <h2 class="section-title">Bringing Aesthetic & Affordability to Pakistan</h2>
+                </div>
+                <div style="background: #FFFFFF; padding: 36px; border-radius: var(--radius-lg); border: 1px solid var(--border-color); line-height: 1.8;">
+                    <p style="margin-bottom: 16px;">
+                        Welcome to <strong>Aura Lifestyle</strong>! Founded in Karachi, Pakistan, our mission is to make Pinterest-worthy fashion accessories, tarnish-resistant dainty jewelry, skincare tools, and lifestyle goodies accessible and affordable for everyone.
+                    </p>
+                    <p style="margin-bottom: 16px;">
+                        We believe that elevated style shouldn’t cost a fortune. Every item in our store is carefully hand-curated, inspected for quality, and packaged with aesthetic love to bring a little sparkle to your everyday routine.
+                    </p>
+                    <div class="perks-grid" style="margin-top: 30px; grid-template-columns: 1fr 1fr;">
+                        <div class="perk-card" style="background: var(--bg-alt); border-radius: 12px;">
+                            <div class="perk-icon">🇵🇰</div>
+                            <div class="perk-text">
+                                <h4>Nationwide Delivery</h4>
+                                <p>Karachi, Lahore, Islamabad & 200+ cities</p>
+                            </div>
+                        </div>
+                        <div class="perk-card" style="background: var(--bg-alt); border-radius: 12px;">
+                            <div class="perk-icon">📦</div>
+                            <div class="perk-text">
+                                <h4>Aesthetic Packaging</h4>
+                                <p>Ready for gifting with personalized cards</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- SECTION: CONTACT & FAQS -->
+        <section id="contact-section" style="display: none; padding: 60px 0;">
+            <div class="container" style="max-width: 900px;">
+                <div class="section-header">
+                    <span class="section-subtitle">Get in Touch</span>
+                    <h2 class="section-title">Customer Care & Support</h2>
+                    <p class="section-desc">Have questions about your order or delivery? We are here to help!</p>
+                </div>
+
+                <div class="quickview-grid" style="background: #FFFFFF; border-radius: var(--radius-lg); border: 1px solid var(--border-color);">
+                    <div>
+                        <h3 style="margin-bottom: 16px; font-size: 1.3rem;">Contact Information</h3>
+                        <div style="display: flex; flex-direction: column; gap: 16px; font-size: 0.92rem;">
+                            <div>
+                                <strong>📱 WhatsApp Support:</strong><br>
+                                <a href="https://wa.me/923001234567" target="_blank" style="color: var(--primary);">+92 300 1234567</a> (Mon-Sat: 10 AM - 8 PM)
+                            </div>
+                            <div>
+                                <strong>📧 Email Inquiries:</strong><br>
+                                <a href="mailto:support@auralifestyle.pk" style="color: var(--primary);">support@auralifestyle.pk</a>
+                            </div>
+                            <div>
+                                <strong>📍 Dispatch Hubs:</strong><br>
+                                DHA Phase 6, Karachi & Gulberg III, Lahore, Pakistan
+                            </div>
+                            <div>
+                                <strong>🚚 Courier Partners:</strong><br>
+                                TCS Express, Trax Logistics, Leopards Courier, PostEx
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Contact Form -->
+                    <form onsubmit="app.handleContactSubmit(event)">
+                        <div class="form-group">
+                            <label class="form-label">Your Name</label>
+                            <input type="text" class="form-input" required placeholder="Ayesha Khan">
+                        </div>
+                        <div class="form-group">
+                            <label class="form-label">Your Email or WhatsApp Number</label>
+                            <input type="text" class="form-input" required placeholder="0300-1234567 or email">
+                        </div>
+                        <div class="form-group">
+                            <label class="form-label">Message / Order Number</label>
+                            <textarea class="form-textarea" rows="4" required placeholder="How can we help you today?"></textarea>
+                        </div>
+                        <button type="submit" class="btn btn-primary btn-block">Send Message</button>
+                    </form>
+                </div>
+            </div>
+        </section>
+
+    </main>
+
+    <!-- ==============================================================================
+         5. SLIDE-OUT CART DRAWER
+         ============================================================================== -->
+    <div class="drawer-overlay" id="cart-drawer-overlay" onclick="app.toggleCartDrawer(false)"></div>
+    <div class="drawer-panel" id="cart-drawer-panel">
+        <div class="drawer-header">
+            <h3>Your Shopping Bag (<span id="cart-drawer-count">0</span>)</h3>
+            <button class="drawer-close" onclick="app.toggleCartDrawer(false)">&times;</button>
+        </div>
+
+        <!-- Free Shipping Goal Meter -->
+        <div class="free-shipping-meter">
+            <div class="meter-text" id="free-shipping-text">
+                <i class="fa-solid fa-truck"></i> Add Rs. 2,499 more for FREE Delivery!
+            </div>
+            <div class="meter-progress-bar">
+                <div class="meter-progress-fill" id="free-shipping-fill" style="width: 0%;"></div>
+            </div>
+        </div>
+
+        <!-- Cart Items List -->
+        <div class="drawer-body" id="cart-items-container">
+            <!-- Populated dynamically by app.js -->
+        </div>
+
+        <!-- Cart Drawer Footer -->
+        <div class="drawer-footer" id="cart-footer">
+            <!-- Coupon Code Input -->
+            <div class="coupon-input-group">
+                <input type="text" id="cart-coupon-input" class="coupon-input" placeholder="Coupon Code (e.g. AURA10)">
+                <button class="btn btn-light btn-sm" onclick="app.applyCouponFromCart()">Apply</button>
+            </div>
+
+            <div class="summary-row">
+                <span>Subtotal:</span>
+                <span id="cart-subtotal-display">Rs. 0</span>
+            </div>
+            <div class="summary-row" id="cart-discount-row" style="display: none; color: var(--success);">
+                <span>Discount:</span>
+                <span id="cart-discount-display">-Rs. 0</span>
+            </div>
+            <div class="summary-row">
+                <span>Estimated Shipping:</span>
+                <span id="cart-shipping-display">Rs. 199</span>
+            </div>
+            <div class="summary-total">
+                <span>Total (PKR):</span>
+                <span id="cart-total-display" style="color: var(--primary);">Rs. 0</span>
+            </div>
+
+            <button class="btn btn-primary btn-block btn-lg" onclick="app.openCheckoutModal()">
+                <i class="fa-solid fa-lock"></i> Proceed to Checkout
+            </button>
+        </div>
+    </div>
+
+    <!-- ==============================================================================
+         6. SLIDE-OUT WISHLIST DRAWER
+         ============================================================================== -->
+    <div class="drawer-overlay" id="wishlist-drawer-overlay" onclick="app.toggleWishlistDrawer(false)"></div>
+    <div class="drawer-panel" id="wishlist-drawer-panel">
+        <div class="drawer-header">
+            <h3>Saved Wishlist (<span id="wishlist-drawer-count">0</span>)</h3>
+            <button class="drawer-close" onclick="app.toggleWishlistDrawer(false)">&times;</button>
+        </div>
+        <div class="drawer-body" id="wishlist-items-container">
+            <!-- Populated dynamically by app.js -->
+        </div>
+    </div>
+
+    <!-- ==============================================================================
+         7. QUICK VIEW / PRODUCT DETAIL MODAL
+         ============================================================================== -->
+    <div class="modal-overlay" id="quickview-modal-overlay" onclick="if(event.target === this) app.closeQuickView()">
+        <div class="modal-card" style="max-width: 800px;">
+            <button class="modal-close-btn" onclick="app.closeQuickView()">&times;</button>
+            <div class="quickview-grid" id="quickview-modal-body">
+                <!-- Populated dynamically by app.js -->
+            </div>
+        </div>
+    </div>
+
+    <!-- ==============================================================================
+         8. CHECKOUT MODAL
+         ============================================================================== -->
+    <div class="modal-overlay" id="checkout-modal-overlay" onclick="if(event.target === this) app.closeCheckoutModal()">
+        <div class="modal-card" style="max-width: 700px;">
+            <button class="modal-close-btn" onclick="app.closeCheckoutModal()">&times;</button>
+            <div style="padding: 30px;">
+                <h3 style="font-size: 1.5rem; color: var(--secondary); margin-bottom: 6px;">Express Checkout</h3>
+                <p style="font-size: 0.85rem; color: var(--text-muted); margin-bottom: 24px;">Complete your delivery details for fast dispatch across Pakistan.</p>
+
+                <form id="checkout-form" onsubmit="app.handlePlaceOrder(event)">
+                    <!-- Contact Info -->
+                    <div class="form-row form-row-2">
+                        <div class="form-group">
+                            <label class="form-label">Full Name *</label>
+                            <input type="text" id="checkout-name" class="form-input" required placeholder="e.g. Ayesha Khan">
+                        </div>
+                        <div class="form-group">
+                            <label class="form-label">Mobile / WhatsApp Number *</label>
+                            <input type="tel" id="checkout-phone" class="form-input" required placeholder="0300-1234567" pattern="^(03[0-9]{9}|\+923[0-9]{9}|923[0-9]{9}|03[0-9]{2}[\s\-][0-9]{7})$">
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label class="form-label">Email Address *</label>
+                        <input type="email" id="checkout-email" class="form-input" required placeholder="name@example.com">
+                    </div>
+
+                    <!-- Shipping Address -->
+                    <div class="form-row form-row-2">
+                        <div class="form-group">
+                            <label class="form-label">City (Pakistan) *</label>
+                            <select id="checkout-city" class="form-select" required onchange="app.handleCityChange(this.value)">
+                                <!-- Populated dynamically by app.js from CONFIG.PAKISTANI_CITIES -->
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label class="form-label">Nearest Landmark / Area</label>
+                            <input type="text" id="checkout-landmark" class="form-input" placeholder="e.g. Near PSO Pump / DHA Phase 5">
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label class="form-label">Complete Street Address *</label>
+                        <textarea id="checkout-address" class="form-textarea" rows="2" required placeholder="House/Apartment #, Street #, Block/Sector"></textarea>
+                    </div>
+
+                    <!-- Payment Method -->
+                    <div class="form-group">
+                        <label class="form-label">Payment Method *</label>
+                        <div class="payment-methods-grid">
+                            <label class="payment-method-card active" onclick="app.selectPaymentMethod('cod', this)">
+                                <input type="radio" name="payment-method" value="cod" checked>
+                                <div class="payment-details">
+                                    <h5>💵 Cash on Delivery (COD) <span class="badge badge-cod">Recommended</span></h5>
+                                    <p>Pay in cash to the rider when your parcel arrives at your address.</p>
+                                </div>
+                            </label>
+
+                            <label class="payment-method-card" onclick="app.selectPaymentMethod('bank_transfer', this)">
+                                <input type="radio" name="payment-method" value="bank_transfer">
+                                <div class="payment-details">
+                                    <h5>🏦 Direct Bank Transfer / Raast</h5>
+                                    <p>Transfer via Meezan Bank / HBL or Raast ID.</p>
+                                </div>
+                            </label>
+
+                            <label class="payment-method-card" onclick="app.selectPaymentMethod('easypaisa_jazzcash', this)">
+                                <input type="radio" name="payment-method" value="easypaisa_jazzcash">
+                                <div class="payment-details">
+                                    <h5>📱 JazzCash / EasyPaisa</h5>
+                                    <p>Send payment to official merchant account (0300-1234567).</p>
+                                </div>
+                            </label>
+                        </div>
+                    </div>
+
+                    <!-- Order Summary Review in Checkout -->
+                    <div style="background: var(--bg-alt); padding: 16px; border-radius: var(--radius-md); margin-bottom: 20px;">
+                        <div class="summary-row">
+                            <span>Subtotal:</span>
+                            <span id="checkout-subtotal">Rs. 0</span>
+                        </div>
+                        <div class="summary-row" id="checkout-discount-row" style="display: none; color: var(--success);">
+                            <span>Discount:</span>
+                            <span id="checkout-discount">-Rs. 0</span>
+                        </div>
+                        <div class="summary-row">
+                            <span>Shipping Fee:</span>
+                            <span id="checkout-shipping">Rs. 199</span>
+                        </div>
+                        <div class="summary-total" style="margin-bottom: 0;">
+                            <span>Total to Pay:</span>
+                            <span id="checkout-total" style="color: var(--primary);">Rs. 0</span>
+                        </div>
+                    </div>
+
+                    <button type="submit" id="place-order-btn" class="btn btn-primary btn-block btn-lg">
+                        <i class="fa-solid fa-check"></i> Place Order (Cash on Delivery)
+                    </button>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <!-- ==============================================================================
+         9. ORDER SUCCESS / CONFIRMATION MODAL
+         ============================================================================== -->
+    <div class="modal-overlay" id="order-success-modal-overlay">
+        <div class="modal-card" style="max-width: 580px;">
+            <div class="order-success-box" id="order-success-content">
+                <!-- Populated dynamically by app.js -->
+            </div>
+        </div>
+    </div>
+
+    <!-- ==============================================================================
+         10. AUTHENTICATION MODAL (Login / Signup)
+         ============================================================================== -->
+    <div class="modal-overlay" id="auth-modal-overlay" onclick="if(event.target === this) app.closeAuthModal()">
+        <div class="modal-card" style="max-width: 440px;">
+            <button class="modal-close-btn" onclick="app.closeAuthModal()">&times;</button>
+            <div style="padding: 34px 28px;">
+                <div style="text-align: center; margin-bottom: 20px;">
+                    <div class="brand-logo-text" style="margin-bottom: 4px;">AURA<span>.</span></div>
+                    <p style="font-size: 0.85rem; color: var(--text-muted);" id="auth-modal-subtitle">Login to view orders and save wishlist</p>
+                </div>
+
+                <!-- Auth Mode Tabs -->
+                <div class="account-tabs" style="justify-content: center;">
+                    <button class="account-tab-btn active" id="tab-login-btn" onclick="app.switchAuthTab('login')">Sign In</button>
+                    <button class="account-tab-btn" id="tab-signup-btn" onclick="app.switchAuthTab('signup')">Create Account</button>
+                </div>
+
+                <!-- Login Form -->
+                <form id="login-form" onsubmit="app.handleLogin(event)">
+                    <div class="form-group">
+                        <label class="form-label">Email Address</label>
+                        <input type="email" id="login-email" class="form-input" required placeholder="you@example.com">
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label">Password</label>
+                        <input type="password" id="login-password" class="form-input" required placeholder="••••••••">
+                    </div>
+                    <button type="submit" class="btn btn-primary btn-block btn-lg" style="margin-top: 10px;">Sign In</button>
+                </form>
+
+                <!-- Signup Form -->
+                <form id="signup-form" style="display: none;" onsubmit="app.handleSignup(event)">
+                    <div class="form-group">
+                        <label class="form-label">Full Name</label>
+                        <input type="text" id="signup-name" class="form-input" required placeholder="Ayesha Khan">
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label">Phone / WhatsApp</label>
+                        <input type="tel" id="signup-phone" class="form-input" required placeholder="0300-1234567">
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label">Email Address</label>
+                        <input type="email" id="signup-email" class="form-input" required placeholder="you@example.com">
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label">Password</label>
+                        <input type="password" id="signup-password" class="form-input" required minlength="6" placeholder="At least 6 characters">
+                    </div>
+                    <button type="submit" class="btn btn-primary btn-block btn-lg" style="margin-top: 10px;">Create Account</button>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <!-- ==============================================================================
+         11. CUSTOMER ACCOUNT & ORDER HISTORY MODAL
+         ============================================================================== -->
+    <div class="modal-overlay" id="account-modal-overlay" onclick="if(event.target === this) app.closeAccountModal()">
+        <div class="modal-card" style="max-width: 720px;">
+            <button class="modal-close-btn" onclick="app.closeAccountModal()">&times;</button>
+            <div style="padding: 30px;">
+                <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px;">
+                    <div>
+                        <h3 style="font-size: 1.4rem; color: var(--secondary);">My Account</h3>
+                        <p style="font-size: 0.82rem; color: var(--text-muted);" id="account-user-greeting">Welcome back!</p>
+                    </div>
+                    <button class="btn btn-light btn-sm" onclick="app.handleLogout()" style="color: var(--danger);">
+                        <i class="fa-solid fa-arrow-right-from-bracket"></i> Sign Out
+                    </button>
+                </div>
+
+                <div class="account-tabs">
+                    <button class="account-tab-btn active" id="acc-tab-orders-btn" onclick="app.switchAccountTab('orders')">📦 Order History</button>
+                    <button class="account-tab-btn" id="acc-tab-profile-btn" onclick="app.switchAccountTab('profile')">👤 My Details</button>
+                </div>
+
+                <!-- Orders Tab View -->
+                <div id="acc-orders-view">
+                    <div id="customer-orders-list">
+                        <!-- Populated dynamically by app.js -->
+                    </div>
+                </div>
+
+                <!-- Profile Tab View -->
+                <div id="acc-profile-view" style="display: none;">
+                    <form onsubmit="app.handleUpdateProfile(event)">
+                        <div class="form-row form-row-2">
+                            <div class="form-group">
+                                <label class="form-label">Full Name</label>
+                                <input type="text" id="profile-name" class="form-input" required>
+                            </div>
+                            <div class="form-group">
+                                <label class="form-label">Phone Number</label>
+                                <input type="tel" id="profile-phone" class="form-input" required>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label class="form-label">City</label>
+                            <select id="profile-city" class="form-select"></select>
+                        </div>
+                        <div class="form-group">
+                            <label class="form-label">Default Shipping Address</label>
+                            <textarea id="profile-address" class="form-textarea" rows="2"></textarea>
+                        </div>
+                        <button type="submit" class="btn btn-primary">Save Profile</button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- ==============================================================================
+         12. FOOTER
+         ============================================================================== -->
+    <footer class="footer">
+        <div class="container footer-grid">
+            <div>
+                <div class="brand-logo-text" style="color: #FFFFFF; margin-bottom: 12px;">AURA<span>.</span></div>
+                <p style="font-size: 0.88rem; line-height: 1.6; margin-bottom: 20px; color: #94A3B8;">
+                    Aura Lifestyle is your go-to destination in Pakistan for trendy aesthetic accessories, minimalist jewelry, beauty tools, and small cute gifts.
+                </p>
+                <div style="display: flex; gap: 12px; font-size: 1.2rem;">
+                    <a href="https://instagram.com" target="_blank" style="color: #FFFFFF;" aria-label="Instagram"><i class="fa-brands fa-instagram"></i></a>
+                    <a href="https://facebook.com" target="_blank" style="color: #FFFFFF;" aria-label="Facebook"><i class="fa-brands fa-facebook"></i></a>
+                    <a href="https://tiktok.com" target="_blank" style="color: #FFFFFF;" aria-label="TikTok"><i class="fa-brands fa-tiktok"></i></a>
+                    <a href="https://wa.me/923001234567" target="_blank" style="color: #25D366;" aria-label="WhatsApp"><i class="fa-brands fa-whatsapp"></i></a>
+                </div>
+            </div>
+
+            <div>
+                <h4 class="footer-title">Quick Links</h4>
+                <ul class="footer-links">
+                    <li><a href="#home" onclick="app.showSection('home')">Home</a></li>
+                    <li><a href="#shop" onclick="app.showSection('shop')">Shop All Products</a></li>
+                    <li><a href="#new" onclick="app.filterByBadge('new')">New Arrivals</a></li>
+                    <li><a href="#sale" onclick="app.filterByBadge('sale')">Sale & Discounts</a></li>
+                    <li><a href="#about" onclick="app.showSection('about')">About Us</a></li>
+                </ul>
+            </div>
+
+            <div>
+                <h4 class="footer-title">Customer Care</h4>
+                <ul class="footer-links">
+                    <li><a href="#contact" onclick="app.showSection('contact')">Track Your Order</a></li>
+                    <li><a href="#contact" onclick="app.showSection('contact')">Shipping & COD Policy</a></li>
+                    <li><a href="#contact" onclick="app.showSection('contact')">Returns & Exchanges</a></li>
+                    <li><a href="#contact" onclick="app.showSection('contact')">Contact Support</a></li>
+                    <li><a href="admin.html">Admin Portal</a></li>
+                </ul>
+            </div>
+
+            <div>
+                <h4 class="footer-title">Join Our VIP Circle</h4>
+                <p style="font-size: 0.85rem; color: #94A3B8; margin-bottom: 14px;">
+                    Subscribe to get exclusive discount codes, flash sale alerts, and new drop updates.
+                </p>
+                <form onsubmit="event.preventDefault(); showToast('🎉 Thank you for subscribing to Aura VIPs!', 'success'); this.reset();" style="display: flex; gap: 6px;">
+                    <input type="email" required placeholder="Your email..." class="form-input" style="padding: 8px 12px; font-size: 0.85rem;">
+                    <button type="submit" class="btn btn-primary btn-sm">Join</button>
+                </form>
+            </div>
+        </div>
+
+        <div class="container footer-bottom">
+            <div>
+                &copy; 2026 Aura Lifestyle Pakistan. All Rights Reserved.
+            </div>
+            <div class="payment-badges-row">
+                <span class="payment-badge">💵 Cash on Delivery (COD)</span>
+                <span class="payment-badge">📱 JazzCash</span>
+                <span class="payment-badge">📱 EasyPaisa</span>
+                <span class="payment-badge">🏦 Raast / Bank Transfer</span>
+            </div>
+        </div>
+    </footer>
+
+    <!-- ==============================================================================
+         13. MOBILE STICKY BOTTOM NAVIGATION BAR
+         ============================================================================== -->
+    <nav class="mobile-bottom-nav">
+        <a href="#home" class="mobile-nav-item active" id="mob-nav-home" onclick="app.showSection('home')">
+            <span class="nav-icon"><i class="fa-solid fa-house"></i></span>
+            <span>Home</span>
+        </a>
+        <a href="#shop" class="mobile-nav-item" id="mob-nav-shop" onclick="app.showSection('shop')">
+            <span class="nav-icon"><i class="fa-solid fa-bag-shopping"></i></span>
+            <span>Shop</span>
+        </a>
+        <button class="mobile-nav-item" onclick="app.toggleWishlistDrawer(true)">
+            <span class="nav-icon"><i class="fa-regular fa-heart"></i></span>
+            <span>Wishlist</span>
+        </button>
+        <button class="mobile-nav-item" onclick="app.toggleCartDrawer(true)">
+            <span class="nav-icon"><i class="fa-solid fa-cart-shopping"></i></span>
+            <span>Cart</span>
+        </button>
+        <button class="mobile-nav-item" onclick="app.handleAuthButtonClick()">
+            <span class="nav-icon"><i class="fa-regular fa-user"></i></span>
+            <span>Account</span>
+        </button>
+    </nav>
+
+    <!-- Floating WhatsApp Support Button -->
+    <a href="https://wa.me/923001234567?text=Hi%20Aura%20Lifestyle,%20I%20have%20a%20question%20about%20an%20order!" target="_blank" class="floating-whatsapp" title="WhatsApp Customer Support" aria-label="WhatsApp Support">
+        <i class="fa-brands fa-whatsapp"></i>
+    </a>
+
+    <!-- Toast Container -->
+    <div id="toast-container" class="toast-container"></div>
+
+    <!-- Scripts -->
+    <script src="js/config.js"></script>
+    <script src="js/supabase-client.js"></script>
+    <script src="js/app.js"></script>
+</body>
+</html>

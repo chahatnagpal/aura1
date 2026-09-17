@@ -1,0 +1,535 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Aura Lifestyle | Store Admin Management Portal</title>
+    
+    <!-- Favicon -->
+    <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>🔐</text></svg>">
+
+    <!-- Stylesheets -->
+    <link rel="stylesheet" href="css/style.css">
+    <link rel="stylesheet" href="css/admin.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
+    <!-- Supabase JS Client CDN -->
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+</head>
+<body>
+
+    <!-- ==============================================================================
+         1. ADMIN AUTHENTICATION GUARD OVERLAY
+         ============================================================================== -->
+    <div class="admin-auth-overlay" id="admin-auth-overlay">
+        <div class="admin-auth-card">
+            <div class="admin-auth-logo">AURA<span>.</span> ADMIN</div>
+            <p class="admin-auth-desc">Secure Management Portal for Aura Lifestyle Pakistan</p>
+
+            <form id="admin-login-form" onsubmit="adminApp.handleAdminLogin(event)">
+                <div class="form-group" style="text-align: left;">
+                    <label class="form-label">Admin Email</label>
+                    <input type="email" id="admin-email-input" class="form-input" required placeholder="admin@auralifestyle.pk" value="admin@auralifestyle.pk">
+                </div>
+                <div class="form-group" style="text-align: left;">
+                    <label class="form-label">Password</label>
+                    <input type="password" id="admin-password-input" class="form-input" required placeholder="••••••••" value="admin123">
+                </div>
+                <div style="font-size: 0.75rem; color: var(--admin-text-muted); margin-bottom: 16px; background: #F1F5F9; padding: 8px; border-radius: 6px; text-align: left;">
+                    💡 <strong>Demo Credentials:</strong><br>Email: <code>admin@auralifestyle.pk</code> | Password: <code>admin123</code>
+                </div>
+                <button type="submit" class="btn btn-primary btn-block btn-lg" id="admin-login-btn">
+                    <i class="fa-solid fa-lock-open"></i> Login to Dashboard
+                </button>
+            </form>
+
+            <div style="margin-top: 18px;">
+                <a href="index.html" style="font-size: 0.85rem; color: var(--admin-text-muted);">
+                    &larr; Return to Customer Storefront
+                </a>
+            </div>
+        </div>
+    </div>
+
+    <!-- ==============================================================================
+         2. SIDEBAR NAVIGATION
+         ============================================================================== -->
+    <aside class="admin-sidebar">
+        <div class="admin-sidebar-header">
+            <div class="admin-logo-text">AURA<span>.</span> <span class="admin-badge">Admin</span></div>
+            <div style="font-size: 0.72rem; color: var(--admin-sidebar-text); margin-top: 2px;">Lifestyle Store Manager</div>
+        </div>
+
+        <ul class="admin-nav">
+            <li>
+                <div class="admin-nav-item active" onclick="adminApp.switchTab('dashboard', this)">
+                    <span class="admin-nav-icon"><i class="fa-solid fa-chart-line"></i></span>
+                    <span>Dashboard</span>
+                </div>
+            </li>
+            <li>
+                <div class="admin-nav-item" onclick="adminApp.switchTab('products', this)">
+                    <span class="admin-nav-icon"><i class="fa-solid fa-boxes-stacked"></i></span>
+                    <span>Products</span>
+                </div>
+            </li>
+            <li>
+                <div class="admin-nav-item" onclick="adminApp.switchTab('categories', this)">
+                    <span class="admin-nav-icon"><i class="fa-solid fa-layer-group"></i></span>
+                    <span>Categories</span>
+                </div>
+            </li>
+            <li>
+                <div class="admin-nav-item" onclick="adminApp.switchTab('orders', this)">
+                    <span class="admin-nav-icon"><i class="fa-solid fa-truck-ramp-box"></i></span>
+                    <span>Orders</span>
+                </div>
+            </li>
+            <li>
+                <div class="admin-nav-item" onclick="adminApp.switchTab('customers', this)">
+                    <span class="admin-nav-icon"><i class="fa-solid fa-users"></i></span>
+                    <span>Customers</span>
+                </div>
+            </li>
+            <li>
+                <div class="admin-nav-item" onclick="adminApp.switchTab('settings', this)">
+                    <span class="admin-nav-icon"><i class="fa-solid fa-sliders"></i></span>
+                    <span>Store Settings</span>
+                </div>
+            </li>
+        </ul>
+
+        <div class="admin-sidebar-footer">
+            <div class="admin-user-info">
+                <strong id="admin-user-name">Store Admin</strong>
+                <span id="admin-user-email">admin@auralifestyle.pk</span>
+            </div>
+            <button class="btn-admin-icon" onclick="adminApp.handleAdminLogout()" title="Logout">
+                <i class="fa-solid fa-power-off"></i>
+            </button>
+        </div>
+    </aside>
+
+    <!-- ==============================================================================
+         3. MAIN CONTENT CONTAINER
+         ============================================================================== -->
+    <main class="admin-main">
+        <!-- Top Bar -->
+        <header class="admin-topbar">
+            <div class="admin-page-title">
+                <h2 id="current-tab-title">Dashboard Overview</h2>
+            </div>
+            <div class="admin-topbar-actions">
+                <a href="index.html" target="_blank" class="btn-admin btn-admin-secondary">
+                    <i class="fa-solid fa-arrow-up-right-from-square"></i> View Storefront
+                </a>
+                <button class="btn-admin btn-admin-primary" onclick="adminApp.openProductModal()">
+                    <i class="fa-solid fa-plus"></i> Add Product
+                </button>
+            </div>
+        </header>
+
+        <!-- Admin Content Views -->
+        <div class="admin-content">
+
+            <!-- TAB 1: DASHBOARD -->
+            <section id="tab-dashboard">
+                <!-- KPI Stat Cards -->
+                <div class="admin-kpi-grid">
+                    <div class="kpi-card">
+                        <div class="kpi-info">
+                            <h4>Total Revenue</h4>
+                            <div class="kpi-value" id="kpi-revenue">Rs. 0</div>
+                        </div>
+                        <div class="kpi-icon icon-revenue"><i class="fa-solid fa-coins"></i></div>
+                    </div>
+
+                    <div class="kpi-card">
+                        <div class="kpi-info">
+                            <h4>Total Orders</h4>
+                            <div class="kpi-value" id="kpi-orders">0</div>
+                        </div>
+                        <div class="kpi-icon icon-orders"><i class="fa-solid fa-bag-shopping"></i></div>
+                    </div>
+
+                    <div class="kpi-card">
+                        <div class="kpi-info">
+                            <h4>Pending Orders</h4>
+                            <div class="kpi-value" id="kpi-pending">0</div>
+                        </div>
+                        <div class="kpi-icon icon-pending"><i class="fa-solid fa-clock-rotate-left"></i></div>
+                    </div>
+
+                    <div class="kpi-card">
+                        <div class="kpi-info">
+                            <h4>Total Products</h4>
+                            <div class="kpi-value" id="kpi-products">0</div>
+                        </div>
+                        <div class="kpi-icon icon-products"><i class="fa-solid fa-tags"></i></div>
+                    </div>
+
+                    <div class="kpi-card">
+                        <div class="kpi-info">
+                            <h4>Low Stock Alerts</h4>
+                            <div class="kpi-value" id="kpi-low-stock" style="color: var(--danger);">0</div>
+                        </div>
+                        <div class="kpi-icon icon-stock"><i class="fa-solid fa-triangle-exclamation"></i></div>
+                    </div>
+                </div>
+
+                <!-- Recent Orders Table -->
+                <div class="admin-card">
+                    <div class="admin-card-header">
+                        <h3 class="admin-card-title">Recent Orders</h3>
+                        <button class="btn-admin btn-admin-secondary" onclick="adminApp.switchTab('orders')">View All Orders &rarr;</button>
+                    </div>
+
+                    <div class="admin-table-container">
+                        <table class="admin-table">
+                            <thead>
+                                <tr>
+                                    <th>Order #</th>
+                                    <th>Customer</th>
+                                    <th>City</th>
+                                    <th>Total (PKR)</th>
+                                    <th>Payment</th>
+                                    <th>Status</th>
+                                    <th>Action</th>
+                                </tr>
+                            </thead>
+                            <tbody id="dashboard-recent-orders-tbody">
+                                <!-- Populated dynamically by admin.js -->
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+
+                <!-- Low Stock Products Warning Table -->
+                <div class="admin-card" id="low-stock-card" style="display: none;">
+                    <div class="admin-card-header">
+                        <h3 class="admin-card-title" style="color: var(--danger);">⚠️ Low Stock Inventory Warnings (<span id="low-stock-count-label">0</span>)</h3>
+                    </div>
+
+                    <div class="admin-table-container">
+                        <table class="admin-table">
+                            <thead>
+                                <tr>
+                                    <th>Product</th>
+                                    <th>Category</th>
+                                    <th>Price</th>
+                                    <th>Current Stock</th>
+                                    <th>Action</th>
+                                </tr>
+                            </thead>
+                            <tbody id="dashboard-low-stock-tbody">
+                                <!-- Populated dynamically by admin.js -->
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </section>
+
+            <!-- TAB 2: PRODUCTS MANAGEMENT -->
+            <section id="tab-products" style="display: none;">
+                <div class="admin-card">
+                    <div class="admin-card-header">
+                        <div style="display: flex; gap: 10px; align-items: center; flex-wrap: wrap;">
+                            <input type="text" id="admin-product-search" class="form-input" style="width: 260px; padding: 8px 14px;" placeholder="Search products..." oninput="adminApp.filterProductsTable(this.value)">
+                            <select id="admin-product-cat-filter" class="form-select" style="width: 180px; padding: 8px 14px;" onchange="adminApp.filterProductsByCategory(this.value)">
+                                <option value="">All Categories</option>
+                            </select>
+                        </div>
+                        <button class="btn-admin btn-admin-primary" onclick="adminApp.openProductModal()">
+                            <i class="fa-solid fa-plus"></i> Add New Product
+                        </button>
+                    </div>
+
+                    <div class="admin-table-container">
+                        <table class="admin-table">
+                            <thead>
+                                <tr>
+                                    <th>Product</th>
+                                    <th>Category</th>
+                                    <th>Price (PKR)</th>
+                                    <th>Compare Price</th>
+                                    <th>Stock</th>
+                                    <th>Badges</th>
+                                    <th>Actions</th>
+                                </tr>
+                            </thead>
+                            <tbody id="products-table-tbody">
+                                <!-- Populated dynamically by admin.js -->
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </section>
+
+            <!-- TAB 3: CATEGORIES MANAGEMENT -->
+            <section id="tab-categories" style="display: none;">
+                <div class="admin-card">
+                    <div class="admin-card-header">
+                        <h3 class="admin-card-title">Product Categories</h3>
+                        <button class="btn-admin btn-admin-primary" onclick="adminApp.openCategoryModal()">
+                            <i class="fa-solid fa-plus"></i> Add Category
+                        </button>
+                    </div>
+
+                    <div class="admin-table-container">
+                        <table class="admin-table">
+                            <thead>
+                                <tr>
+                                    <th>Image</th>
+                                    <th>Category Name</th>
+                                    <th>Slug</th>
+                                    <th>Description</th>
+                                    <th>Actions</th>
+                                </tr>
+                            </thead>
+                            <tbody id="categories-table-tbody">
+                                <!-- Populated dynamically by admin.js -->
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </section>
+
+            <!-- TAB 4: ORDERS FULFILLMENT -->
+            <section id="tab-orders" style="display: none;">
+                <div class="admin-card">
+                    <div class="admin-card-header">
+                        <div style="display: flex; gap: 8px; flex-wrap: wrap;">
+                            <button class="btn-admin btn-admin-secondary active" onclick="adminApp.filterOrdersByStatus('all', this)">All</button>
+                            <button class="btn-admin btn-admin-secondary" onclick="adminApp.filterOrdersByStatus('pending', this)">Pending</button>
+                            <button class="btn-admin btn-admin-secondary" onclick="adminApp.filterOrdersByStatus('processing', this)">Processing</button>
+                            <button class="btn-admin btn-admin-secondary" onclick="adminApp.filterOrdersByStatus('shipped', this)">Shipped</button>
+                            <button class="btn-admin btn-admin-secondary" onclick="adminApp.filterOrdersByStatus('delivered', this)">Delivered</button>
+                            <button class="btn-admin btn-admin-secondary" onclick="adminApp.filterOrdersByStatus('cancelled', this)">Cancelled</button>
+                        </div>
+                    </div>
+
+                    <div class="admin-table-container">
+                        <table class="admin-table">
+                            <thead>
+                                <tr>
+                                    <th>Order #</th>
+                                    <th>Date</th>
+                                    <th>Customer & Phone</th>
+                                    <th>City</th>
+                                    <th>Total (PKR)</th>
+                                    <th>Payment</th>
+                                    <th>Status</th>
+                                    <th>Actions</th>
+                                </tr>
+                            </thead>
+                            <tbody id="orders-table-tbody">
+                                <!-- Populated dynamically by admin.js -->
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </section>
+
+            <!-- TAB 5: CUSTOMERS -->
+            <section id="tab-customers" style="display: none;">
+                <div class="admin-card">
+                    <div class="admin-card-header">
+                        <h3 class="admin-card-title">Registered & Ordering Customers</h3>
+                    </div>
+
+                    <div class="admin-table-container">
+                        <table class="admin-table">
+                            <thead>
+                                <tr>
+                                    <th>Customer Name</th>
+                                    <th>Email</th>
+                                    <th>Phone (Pakistan)</th>
+                                    <th>City</th>
+                                    <th>Total Orders</th>
+                                    <th>Total Spent</th>
+                                    <th>Last Active</th>
+                                </tr>
+                            </thead>
+                            <tbody id="customers-table-tbody">
+                                <!-- Populated dynamically by admin.js -->
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </section>
+
+            <!-- TAB 6: SETTINGS & SEED TOOLS -->
+            <section id="tab-settings" style="display: none;">
+                <div class="admin-card">
+                    <div class="admin-card-header">
+                        <h3 class="admin-card-title">Database & Supabase Connection</h3>
+                    </div>
+
+                    <div style="background: var(--admin-bg); padding: 20px; border-radius: 10px; margin-bottom: 20px;">
+                        <div style="display: flex; align-items: center; gap: 10px; margin-bottom: 12px;">
+                            <span id="supabase-status-indicator" style="width: 12px; height: 12px; border-radius: 50%; background: #16A34A; display: inline-block;"></span>
+                            <strong id="supabase-status-text">Connected to Supabase / Local Storage Demo Mode</strong>
+                        </div>
+                        <p style="font-size: 0.88rem; color: var(--admin-text-muted); line-height: 1.6;">
+                            To connect your live Supabase cloud database, run the <code>supabase-schema.sql</code> script in your Supabase SQL Editor and update your credentials in <code>js/config.js</code>.
+                        </p>
+                    </div>
+
+                    <div style="display: flex; gap: 12px; flex-wrap: wrap;">
+                        <button class="btn-admin btn-admin-primary" onclick="adminApp.resetStoreDemoData()">
+                            <i class="fa-solid fa-arrows-rotate"></i> Re-Seed Pakistani Store Demo Data
+                        </button>
+                    </div>
+                </div>
+            </section>
+
+        </div>
+    </main>
+
+    <!-- ==============================================================================
+         4. ADD / EDIT PRODUCT MODAL
+         ============================================================================== -->
+    <div class="modal-overlay" id="product-modal-overlay">
+        <div class="modal-card" style="max-width: 680px;">
+            <button class="modal-close-btn" onclick="adminApp.closeProductModal()">&times;</button>
+            <div style="padding: 30px;">
+                <h3 style="font-size: 1.4rem; color: var(--admin-secondary); margin-bottom: 20px;" id="product-modal-title">Add New Product</h3>
+
+                <form id="product-form" onsubmit="adminApp.handleSaveProduct(event)">
+                    <input type="hidden" id="prod-edit-id">
+
+                    <div class="form-group">
+                        <label class="form-label">Product Name *</label>
+                        <input type="text" id="prod-name" class="form-input" required placeholder="e.g. Dainty Gold Pearl Pendant Necklace">
+                    </div>
+
+                    <div class="form-row form-row-2">
+                        <div class="form-group">
+                            <label class="form-label">Category *</label>
+                            <select id="prod-category" class="form-select" required>
+                                <!-- Populated dynamically by admin.js -->
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label class="form-label">Stock Quantity *</label>
+                            <input type="number" id="prod-stock" class="form-input" required min="0" value="20">
+                        </div>
+                    </div>
+
+                    <div class="form-row form-row-2">
+                        <div class="form-group">
+                            <label class="form-label">Selling Price (PKR) *</label>
+                            <input type="number" id="prod-price" class="form-input" required min="0" placeholder="1250">
+                        </div>
+                        <div class="form-group">
+                            <label class="form-label">Compare at Price (PKR)</label>
+                            <input type="number" id="prod-compare-price" class="form-input" min="0" placeholder="1800">
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label class="form-label">Product Description</label>
+                        <textarea id="prod-desc" class="form-textarea" rows="3" placeholder="Describe materials, tarnish resistance, styling tips..."></textarea>
+                    </div>
+
+                    <!-- Image Upload / URL -->
+                    <div class="form-group">
+                        <label class="form-label">Product Image (Upload or URL)</label>
+                        <div class="image-upload-dropzone" onclick="document.getElementById('prod-file-input').click()">
+                            <div class="image-upload-icon"><i class="fa-solid fa-cloud-arrow-up"></i></div>
+                            <strong>Click to Upload Image to Supabase Storage</strong>
+                            <p style="font-size: 0.75rem; color: var(--admin-text-muted); margin-top: 4px;">PNG, JPG, WebP up to 5MB</p>
+                        </div>
+                        <input type="file" id="prod-file-input" style="display: none;" accept="image/*" onchange="adminApp.handleImageFileUpload(this.files[0])">
+                        
+                        <div style="text-align: center; margin: 8px 0; font-size: 0.8rem; color: var(--admin-text-muted);">— OR ENTER DIRECT IMAGE URL —</div>
+                        <input type="url" id="prod-image-url" class="form-input" placeholder="https://images.unsplash.com/..." oninput="adminApp.handleDirectImageUrl(this.value)">
+
+                        <div class="image-preview-strip" id="prod-image-preview-container">
+                            <!-- Preview thumbnail rendered here -->
+                        </div>
+                    </div>
+
+                    <!-- Badges -->
+                    <div class="form-group">
+                        <label class="form-label">Product Badges</label>
+                        <div style="display: flex; gap: 16px;">
+                            <label class="filter-checkbox">
+                                <input type="checkbox" id="prod-featured">
+                                <span>Featured Pick</span>
+                            </label>
+                            <label class="filter-checkbox">
+                                <input type="checkbox" id="prod-sale">
+                                <span>On Sale</span>
+                            </label>
+                            <label class="filter-checkbox">
+                                <input type="checkbox" id="prod-new" checked>
+                                <span>New Arrival</span>
+                            </label>
+                        </div>
+                    </div>
+
+                    <button type="submit" class="btn btn-primary btn-block btn-lg" style="margin-top: 20px;">
+                        Save Product
+                    </button>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <!-- ==============================================================================
+         5. ADD / EDIT CATEGORY MODAL
+         ============================================================================== -->
+    <div class="modal-overlay" id="category-modal-overlay">
+        <div class="modal-card" style="max-width: 500px;">
+            <button class="modal-close-btn" onclick="adminApp.closeCategoryModal()">&times;</button>
+            <div style="padding: 30px;">
+                <h3 style="font-size: 1.4rem; color: var(--admin-secondary); margin-bottom: 20px;" id="category-modal-title">Add Category</h3>
+
+                <form id="category-form" onsubmit="adminApp.handleSaveCategory(event)">
+                    <input type="hidden" id="cat-edit-id">
+
+                    <div class="form-group">
+                        <label class="form-label">Category Name *</label>
+                        <input type="text" id="cat-name" class="form-input" required placeholder="e.g. Aesthetic Jewelry">
+                    </div>
+
+                    <div class="form-group">
+                        <label class="form-label">Image URL</label>
+                        <input type="url" id="cat-image-url" class="form-input" placeholder="https://images.unsplash.com/...">
+                    </div>
+
+                    <div class="form-group">
+                        <label class="form-label">Description</label>
+                        <textarea id="cat-desc" class="form-textarea" rows="2" placeholder="Brief category summary..."></textarea>
+                    </div>
+
+                    <button type="submit" class="btn btn-primary btn-block btn-lg">
+                        Save Category
+                    </button>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <!-- ==============================================================================
+         6. ORDER DETAILS & FULFILLMENT MODAL
+         ============================================================================== -->
+    <div class="modal-overlay" id="order-modal-overlay">
+        <div class="modal-card" style="max-width: 720px;">
+            <button class="modal-close-btn" onclick="adminApp.closeOrderModal()">&times;</button>
+            <div style="padding: 30px;" id="order-details-modal-content">
+                <!-- Populated dynamically by admin.js -->
+            </div>
+        </div>
+    </div>
+
+    <!-- Toast Container -->
+    <div id="toast-container" class="toast-container"></div>
+
+    <!-- Scripts -->
+    <script src="js/config.js"></script>
+    <script src="js/supabase-client.js"></script>
+    <script src="js/admin.js"></script>
+</body>
+</html>
