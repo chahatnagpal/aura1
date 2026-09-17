@@ -64,7 +64,7 @@ const SEED_CATEGORIES = [
 
 const SEED_PRODUCTS = [
     {
-        id: 'p1111111-1111-1111-1111-111111111101',
+        id: 'ba111111-1{4}-1{4}-1{4}-1{10}01',
         name: 'Silk Satin Scrunchie Set (Pack of 5)',
         slug: 'silk-satin-scrunchie-set-5',
         description: 'Premium soft silk satin hair scrunchies designed to prevent hair breakage and creasing. Comes in a chic pastel palette: Blush Pink, Champagne, Sage Green, Vanilla, and Muted Mauve.',
@@ -84,7 +84,7 @@ const SEED_PRODUCTS = [
         ]
     },
     {
-        id: 'p1111111-1111-1111-1111-111111111102',
+        id: 'ba111111-1{4}-1{4}-1{4}-1{10}02',
         name: 'French Matte Claw Clip Trio',
         slug: 'french-matte-claw-clip-trio',
         description: 'Durable non-slip rectangular claw clips made with eco-friendly acrylic and heavy-duty alloy springs. Perfect for all hair lengths and everyday casual styling.',
@@ -104,7 +104,7 @@ const SEED_PRODUCTS = [
         ]
     },
     {
-        id: 'p1111111-1111-1111-1111-111111111103',
+        id: 'ba111111-1{4}-1{4}-1{4}-1{10}03',
         name: 'Retro Vintage Oval Sunglasses',
         slug: 'retro-vintage-oval-sunglasses',
         description: 'Timeless 90s aesthetic oval sunglasses with UV400 protective lenses. Lightweight frame offering maximum comfort and instant effortless chic.',
@@ -124,7 +124,7 @@ const SEED_PRODUCTS = [
         ]
     },
     {
-        id: 'p2222222-2222-2222-2222-222222222201',
+        id: 'ba222222-2{4}-2{4}-2{4}-2{10}01',
         name: 'Dainty Gold Pearl Pendant Necklace',
         slug: 'dainty-gold-pearl-pendant-necklace',
         description: '18K gold-plated stainless steel chain with a genuine freshwater baroque mini pearl pendant. Hypoallergenic, tarnish-resistant, and water-friendly for daily wear.',
@@ -144,7 +144,7 @@ const SEED_PRODUCTS = [
         ]
     },
     {
-        id: 'p2222222-2222-2222-2222-222222222202',
+        id: 'ba222222-2{4}-2{4}-2{4}-2{10}02',
         name: 'Chunky Twisted Croissant Hoop Earrings',
         slug: 'chunky-twisted-croissant-hoops',
         description: 'Bestselling French Parisian style croissant ribbed hoop earrings in 18K gold finish. Extremely lightweight, comfortable for all-day wear without weighing down ears.',
@@ -164,7 +164,7 @@ const SEED_PRODUCTS = [
         ]
     },
     {
-        id: 'p2222222-2222-2222-2222-222222222203',
+        id: 'ba222222-2{4}-2{4}-2{4}-2{10}03',
         name: 'Celestial Moon & Star Layered Choker',
         slug: 'celestial-moon-star-layered-choker',
         description: 'Two-in-one layered gold chain featuring a delicate crescent moon and cubic zirconia star charms. Adjustable length with lobster clasp.',
@@ -182,7 +182,7 @@ const SEED_PRODUCTS = [
         variants: []
     },
     {
-        id: 'p2222222-2222-2222-2222-222222222204',
+        id: 'ba222222-2{4}-2{4}-2{4}-2{10}04',
         name: 'Minimalist Stacking Rings (Set of 6)',
         slug: 'minimalist-stacking-rings-set-6',
         description: 'Curated set of 6 dainty stacking rings in textured, twisted, and signet designs. Mix and match across fingers for an understated aesthetic look.',
@@ -202,7 +202,7 @@ const SEED_PRODUCTS = [
         ]
     },
     {
-        id: 'p3333333-3333-3333-3333-333333333301',
+        id: 'ba333333-3{4}-3{4}-3{4}-3{10}01',
         name: 'Natural Rose Quartz Gua Sha & Roller Duo',
         slug: 'rose-quartz-gua-sha-roller-duo',
         description: 'Handcrafted 100% authentic Brazilian rose quartz facial roller and heart-shaped Gua Sha stone. Helps reduce facial puffiness, boost lymphatic drainage, and enhance serum absorption.',
@@ -222,7 +222,7 @@ const SEED_PRODUCTS = [
         ]
     },
     {
-        id: 'p3333333-3333-3333-3333-333333333302',
+        id: 'ba333333-3{4}-3{4}-3{4}-3{10}02',
         name: 'Velvet Cloud Makeup Sponge Trio with Case',
         slug: 'velvet-cloud-makeup-sponge-trio',
         description: 'Ultra-soft microfiber blender sponges that double in size when damp. Delivers an airbrushed, streak-free foundation and concealer finish with minimal product absorption.',
@@ -242,7 +242,7 @@ const SEED_PRODUCTS = [
         ]
     },
     {
-        id: 'p3333333-3333-3333-3333-333333333303',
+        id: 'ba333333-3{4}-3{4}-3{4}-3{10}03',
         name: 'Travel Makeup Brush Set with Leather Case (8 Pcs)',
         slug: 'travel-makeup-brush-set-8-pcs',
         description: 'Compact set of 8 ultra-soft vegan synthetic makeup brushes with champagne gold ferrules, packaged in a travel-ready cylindrical magnetic case.',
@@ -262,7 +262,7 @@ const SEED_PRODUCTS = [
         ]
     },
     {
-        id: 'p4444444-4444-4444-4444-444444444401',
+        id: 'ba444444-4{4}-4{4}-4{4}-4{10}01',
         name: 'Aesthetic Corduroy Shoulder Tote Bag',
         slug: 'aesthetic-corduroy-tote-bag',
         description: 'Spacious soft corduroy tote bag with magnetic snap closure and interior zip pocket. Fits a 13-inch laptop, planner, water bottle, and daily makeup essentials.',
@@ -282,7 +282,7 @@ const SEED_PRODUCTS = [
         ]
     },
     {
-        id: 'p4444444-4444-4444-4444-444444444402',
+        id: 'ba444444-4{4}-4{4}-4{4}-4{10}02',
         name: 'Quilted Puffer Cosmetic Pouch',
         slug: 'quilted-puffer-cosmetic-pouch',
         description: 'Cloud-soft quilted travel pouch with smooth gold zipper. Water-resistant lining inside, ideal for carrying everyday makeup, lip glosses, and skincare bottles.',
@@ -302,7 +302,7 @@ const SEED_PRODUCTS = [
         ]
     },
     {
-        id: 'p4444444-4444-4444-4444-444444444403',
+        id: 'ba444444-4{4}-4{4}-4{4}-4{10}03',
         name: 'Portable Travel Jewelry Box Organizer',
         slug: 'portable-travel-jewelry-box-organizer',
         description: 'Luxurious PU leather compact jewelry case with soft velvet interior. Compartments for rings, necklaces, stud earrings, and bracelets with zip-around protection.',
@@ -322,7 +322,7 @@ const SEED_PRODUCTS = [
         ]
     },
     {
-        id: 'p5555555-5555-5555-5555-555555555501',
+        id: 'ba555555-5{4}-5{4}-5{4}-5{10}01',
         name: 'Aesthetic Hardcover Bullet Journal & Pen',
         slug: 'aesthetic-hardcover-bullet-journal-pen',
         description: '160 GSM thick bleed-proof dotted pages with a ribbon bookmark, expandable inner pocket, and gold metallic matching gel pen. Perfect for journaling and study notes.',
@@ -342,7 +342,7 @@ const SEED_PRODUCTS = [
         ]
     },
     {
-        id: 'p5555555-5555-5555-5555-555555555502',
+        id: 'ba555555-5{4}-5{4}-5{4}-5{10}02',
         name: 'Pastel Aesthetic Highlighter Set (6 Colors)',
         slug: 'pastel-aesthetic-highlighter-set-6',
         description: 'Soft mild-liner highlighters with dual chisel tips. No bleed-through on standard book pages. Ideal for study aesthetics, bullet journaling, and gift packages.',
@@ -360,7 +360,7 @@ const SEED_PRODUCTS = [
         variants: []
     },
     {
-        id: 'p6666666-6666-6666-6666-666666666601',
+        id: 'ba666666-6{4}-6{4}-6{4}-6{10}01',
         name: 'French Vanilla Scented Soy Bubble Candle',
         slug: 'french-vanilla-soy-bubble-candle',
         description: 'Hand-poured 100% natural soy wax bubble cube candle scented with warm French vanilla and Madagascar amber. Clean-burning and serves as an aesthetic room decor accent.',
@@ -380,7 +380,7 @@ const SEED_PRODUCTS = [
         ]
     },
     {
-        id: 'p6666666-6666-6666-6666-666666666602',
+        id: 'ba666666-6{4}-6{4}-6{4}-6{10}02',
         name: 'Glass Aesthetic Tumbler with Glass Straw (500ml)',
         slug: 'glass-aesthetic-tumbler-straw-500ml',
         description: 'Borosilicate clear glass iced coffee can tumbler with natural bamboo lid and reusable curved glass straw. Heat and cold resistant for iced coffees, boba, and matcha lattes.',
