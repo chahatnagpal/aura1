@@ -8,9 +8,8 @@
 
 const CONFIG = {
     // Supabase Credentials
-    // Replace these placeholder strings with your actual Supabase URL & anon public key
-    SUPABASE_URL: window.ENV_SUPABASE_URL || 'https://your-project.supabase.co',
-    SUPABASE_ANON_KEY: window.ENV_SUPABASE_ANON_KEY || 'your-anon-key-here',
+    SUPABASE_URL: window.ENV_SUPABASE_URL || 'https://xhfaybnwbevmnqtltvam.supabase.co',
+    SUPABASE_ANON_KEY: window.ENV_SUPABASE_ANON_KEY || 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InhoZmF5Ym53YmV2bW5xdGx0dmFtIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODk2NjE3ODIsImV4cCI6MjEwNTIzNzc4Mn0.gl8VF6CrWJk47Usl26_XYQTZEeIEsKiOD519sWQ3SHk',
 
     // Storage bucket for product images
     STORAGE_BUCKET: 'product-images',
