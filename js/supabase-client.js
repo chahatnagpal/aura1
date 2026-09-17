@@ -1346,41 +1346,54 @@ const OrderService = {
         } = orderPayload;
 
         const orderNumber = generateOrderNumber();
+        const orderId = (typeof crypto !== 'undefined' && crypto.randomUUID) ? crypto.randomUUID() : ('ord_' + Date.now());
         const user = await AuthService.getCurrentUser();
         const userId = user ? user.id : null;
 
         if (isSupabaseConfigured && supabaseClient) {
             // 1. Insert order
+            const newOrderRow = {
+                id: orderId,
+                order_number: orderNumber,
+                user_id: userId,
+                customer_name: customerName,
+                customer_email: customerEmail,
+                customer_phone: customerPhone,
+                shipping_address: shippingAddress,
+                city: city,
+                landmark: landmark,
+                payment_method: paymentMethod,
+                payment_status: 'unpaid',
+                order_status: 'pending',
+                subtotal: Number(subtotal),
+                shipping_fee: Number(shippingFee),
+                discount: Number(discount || 0),
+                total_amount: Number(totalAmount),
+                coupon_code: couponCode,
+                notes: notes
+            };
+
             const { data: order, error: orderErr } = await supabaseClient
                 .from('orders')
-                .insert([{
-                    order_number: orderNumber,
-                    user_id: userId,
-                    customer_name: customerName,
-                    customer_email: customerEmail,
-                    customer_phone: customerPhone,
-                    shipping_address: shippingAddress,
-                    city: city,
-                    landmark: landmark,
-                    payment_method: paymentMethod,
-                    payment_status: paymentMethod === 'cod' ? 'unpaid' : 'unpaid',
-                    order_status: 'pending',
-                    subtotal: Number(subtotal),
-                    shipping_fee: Number(shippingFee),
-                    discount: Number(discount || 0),
-                    total_amount: Number(totalAmount),
-                    coupon_code: couponCode,
-                    notes: notes
-                }])
+                .insert([newOrderRow])
                 .select()
-                .single();
+                .maybeSingle();
 
-            if (orderErr) throw orderErr;
+            if (orderErr) {
+                console.warn('Orders insert error, trying without select:', orderErr);
+                // Try plain insert if select was blocked by RLS
+                const { error: plainErr } = await supabaseClient
+                    .from('orders')
+                    .insert([newOrderRow]);
+                if (plainErr) throw plainErr;
+            }
+
+            const finalOrder = order || newOrderRow;
 
             // 2. Insert order items
             if (items.length > 0) {
                 const itemRows = items.map(item => ({
-                    order_id: order.id,
+                    order_id: finalOrder.id,
                     product_id: item.productId,
                     product_name: item.name,
                     variant_title: item.variantName || '',
@@ -1394,12 +1407,12 @@ const OrderService = {
                     .from('order_items')
                     .insert(itemRows);
 
-                if (itemsErr) console.error('Error inserting order items:', itemsErr);
+                if (itemsErr) console.warn('Error inserting order items to Supabase:', itemsErr);
             }
 
             // Clear Cart
             await CartService.clearCart();
-            return order;
+            return finalOrder;
         } else {
             // Mock Order
             const newOrder = {
