@@ -84,15 +84,23 @@
             <input type="password" id="regPassword" class="form-input" minlength="6" placeholder="••••••••" required>
           </div>
 
+          <div class="form-group">
+            <label class="form-label" for="regRole">Account Type</label>
+            <select id="regRole" class="form-select">
+              <option value="customer">Customer (Order Food Online)</option>
+              <option value="admin">Restaurant Admin / Manager (Full Dashboard Access)</option>
+            </select>
+          </div>
+
           <button type="submit" class="btn btn-primary btn-lg" style="width:100%; margin-top:12px;" id="btnRegSubmit">
-            Create Free Account
+            Create Account
           </button>
         </form>
 
         <!-- Demo Quick Login Helper -->
         <div style="margin-top: 28px; padding-top: 20px; border-top: 1px solid var(--color-light-200); text-align: center;">
           <span class="text-xs text-muted" style="display:block; margin-bottom: 10px;">⚡ Quick Demo Accounts:</span>
-          <div style="display:flex; gap:8px; justify-content:center;">
+          <div style="display:flex; gap:8px; justify-content:center; flex-wrap:wrap;">
             <button class="btn btn-outline btn-sm" id="btnFillDemoCustomer">👤 Customer Demo</button>
             <button class="btn btn-secondary btn-sm" id="btnFillDemoAdmin">👑 Admin Demo</button>
           </div>
@@ -159,21 +167,22 @@
       const email = document.getElementById('regEmail').value.trim();
       const phone = document.getElementById('regPhone').value.trim();
       const password = document.getElementById('regPassword').value;
+      const role = document.getElementById('regRole').value;
       const btn = document.getElementById('btnRegSubmit');
 
       btn.disabled = true;
       btn.textContent = 'Creating account...';
 
       try {
-        await signUp({ fullName, email, phone, password });
-        showToast('Account created successfully! 🎉', 'success');
+        await signUp({ fullName, email, phone, password, role });
+        showToast(`Account created as ${role === 'admin' ? 'Administrator' : 'Customer'}! 🎉`, 'success');
         setTimeout(() => {
-          window.location.href = returnUrl;
-        }, 500);
+          window.location.href = role === 'admin' ? 'admin.html' : returnUrl;
+        }, 600);
       } catch (err) {
         showToast(err.message, 'danger');
         btn.disabled = false;
-        btn.textContent = 'Create Free Account';
+        btn.textContent = 'Create Account';
       }
     });
 
