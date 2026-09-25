@@ -37,7 +37,7 @@ CREATE POLICY "Admin product image upload"
         AND EXISTS (
             SELECT 1 FROM public.profiles
             WHERE profiles.id = auth.uid()
-            AND profiles.role = 'admin'
+            AND profiles.role::text = 'admin'
         )
     );
 
@@ -51,7 +51,7 @@ CREATE POLICY "Admin product image update"
         AND EXISTS (
             SELECT 1 FROM public.profiles
             WHERE profiles.id = auth.uid()
-            AND profiles.role = 'admin'
+            AND profiles.role::text = 'admin'
         )
     );
 
@@ -65,6 +65,6 @@ CREATE POLICY "Admin product image delete"
         AND EXISTS (
             SELECT 1 FROM public.profiles
             WHERE profiles.id = auth.uid()
-            AND profiles.role = 'admin'
+            AND profiles.role::text = 'admin'
         )
     );
