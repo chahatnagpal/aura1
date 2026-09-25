@@ -17,17 +17,14 @@ ON CONFLICT (id) DO UPDATE SET
     file_size_limit = 5242880,
     allowed_mime_types = ARRAY['image/jpeg', 'image/png', 'image/webp', 'image/avif', 'image/gif'];
 
--- 2. Enable RLS on storage.objects
-ALTER TABLE storage.objects ENABLE ROW LEVEL SECURITY;
-
--- 3. Policy: Anyone can view product images
+-- 2. Policy: Anyone can view product images
 DROP POLICY IF EXISTS "Public product image view" ON storage.objects;
 CREATE POLICY "Public product image view"
     ON storage.objects FOR SELECT
     TO anon, authenticated
     USING (bucket_id = 'product-images');
 
--- 4. Policy: Only admins can upload product images
+-- 3. Policy: Only admins can upload product images
 DROP POLICY IF EXISTS "Admin product image upload" ON storage.objects;
 CREATE POLICY "Admin product image upload"
     ON storage.objects FOR INSERT
@@ -41,7 +38,7 @@ CREATE POLICY "Admin product image upload"
         )
     );
 
--- 5. Policy: Only admins can update product images
+-- 4. Policy: Only admins can update product images
 DROP POLICY IF EXISTS "Admin product image update" ON storage.objects;
 CREATE POLICY "Admin product image update"
     ON storage.objects FOR UPDATE
@@ -55,7 +52,7 @@ CREATE POLICY "Admin product image update"
         )
     );
 
--- 6. Policy: Only admins can delete product images
+-- 5. Policy: Only admins can delete product images
 DROP POLICY IF EXISTS "Admin product image delete" ON storage.objects;
 CREATE POLICY "Admin product image delete"
     ON storage.objects FOR DELETE
