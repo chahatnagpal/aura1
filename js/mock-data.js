@@ -50,7 +50,7 @@ export const MOCK_CATEGORIES = [
 
 export const MOCK_PRODUCTS = [
   {
-    id: 'p1000000-0000-0000-0000-000000000001',
+    id: 'a1000000-0000-0000-0000-000000000001',
     category_id: 'c1000000-0000-0000-0000-000000000001',
     name: 'Truffle Umami Smash Burger',
     description: 'Double Angus beef smash patty, truffle black garlic aioli, aged sharp cheddar, caramelized shallots on toasted butter brioche.',
@@ -62,7 +62,7 @@ export const MOCK_PRODUCTS = [
     reviews_count: 142
   },
   {
-    id: 'p1000000-0000-0000-0000-000000000012',
+    id: 'a1000000-0000-0000-0000-000000000002',
     category_id: 'c1000000-0000-0000-0000-000000000001',
     name: 'Spicy Nashville Crisp Burger',
     description: 'Crispy buttermilk fried chicken breast, cayenne glaze, dill pickles, cool herb slaw, chipotle ranch on brioche.',
@@ -74,7 +74,7 @@ export const MOCK_PRODUCTS = [
     reviews_count: 98
   },
   {
-    id: 'p1000000-0000-0000-0000-000000000002',
+    id: 'a1000000-0000-0000-0000-000000000003',
     category_id: 'c1000000-0000-0000-0000-000000000002',
     name: 'Burrata Margherita Pizza',
     description: 'San Marzano D.O.P tomato sauce, fresh creamy burrata, sweet Genovese basil, cold-pressed extra virgin olive oil.',
@@ -86,7 +86,7 @@ export const MOCK_PRODUCTS = [
     reviews_count: 215
   },
   {
-    id: 'p1000000-0000-0000-0000-000000000022',
+    id: 'a1000000-0000-0000-0000-000000000004',
     category_id: 'c1000000-0000-0000-0000-000000000002',
     name: 'Spicy Pepperoni & Hot Honey Pizza',
     description: 'Crisp cupping pepperoni, fresh mozzarella, jalapeño rings, drizzled with spicy habanero infused wildflower honey.',
@@ -98,7 +98,7 @@ export const MOCK_PRODUCTS = [
     reviews_count: 89
   },
   {
-    id: 'p1000000-0000-0000-0000-000000000003',
+    id: 'a1000000-0000-0000-0000-000000000005',
     category_id: 'c1000000-0000-0000-0000-000000000003',
     name: 'Royal Dum Hyderabadi Biryani',
     description: 'Tender bone-in chicken marinated in secret spices, layered with saffron basmati rice, sealed and slow cooked in sealed pot.',
@@ -110,7 +110,7 @@ export const MOCK_PRODUCTS = [
     reviews_count: 320
   },
   {
-    id: 'p1000000-0000-0000-0000-000000000032',
+    id: 'a1000000-0000-0000-0000-000000000006',
     category_id: 'c1000000-0000-0000-0000-000000000003',
     name: 'Shahi Paneer Tikka Rice Bowl',
     description: 'Clay-oven charcoal roasted paneer cubes tossed in rich cashew tomato gravy over aromatic cumin butter rice.',
@@ -122,7 +122,7 @@ export const MOCK_PRODUCTS = [
     reviews_count: 67
   },
   {
-    id: 'p1000000-0000-0000-0000-000000000004',
+    id: 'a1000000-0000-0000-0000-000000000007',
     category_id: 'c1000000-0000-0000-0000-000000000004',
     name: 'Korean Sticky Garlic Wings (8 pcs)',
     description: 'Double fried crunchy chicken wings tossed in rich sweet garlic soy reduction, garnished with scallions and roasted sesame.',
@@ -134,7 +134,7 @@ export const MOCK_PRODUCTS = [
     reviews_count: 178
   },
   {
-    id: 'p1000000-0000-0000-0000-000000000042',
+    id: 'a1000000-0000-0000-0000-000000000008',
     category_id: 'c1000000-0000-0000-0000-000000000004',
     name: 'Golden Crunch Tenders & Waffle Fries',
     description: 'Hand breaded whole chicken breast tenderloins, seasoned crispy waffle fries, signature honey mustard dip.',
@@ -146,7 +146,7 @@ export const MOCK_PRODUCTS = [
     reviews_count: 112
   },
   {
-    id: 'p1000000-0000-0000-0000-000000000005',
+    id: 'a1000000-0000-0000-0000-000000000009',
     category_id: 'c1000000-0000-0000-0000-000000000005',
     name: 'Passionfruit Mint Fizz',
     description: 'Sparkling artisanal soda with real passionfruit pulp, fresh crushed garden mint, citrus lime, and organic cane sugar.',
@@ -158,7 +158,7 @@ export const MOCK_PRODUCTS = [
     reviews_count: 53
   },
   {
-    id: 'p1000000-0000-0000-0000-000000000052',
+    id: 'a1000000-0000-0000-0000-000000000010',
     category_id: 'c1000000-0000-0000-0000-000000000005',
     name: 'Iced Salted Caramel Cold Brew',
     description: 'Slow cold-steeped Arabica blend topped with dense vanilla-caramel sea salt foam and a dash of cocoa.',
@@ -170,7 +170,7 @@ export const MOCK_PRODUCTS = [
     reviews_count: 88
   },
   {
-    id: 'p1000000-0000-0000-0000-000000000006',
+    id: 'a1000000-0000-0000-0000-000000000011',
     category_id: 'c1000000-0000-0000-0000-000000000006',
     name: 'Molten Lava Chocolate Cake',
     description: 'Warm Belgian 70% dark chocolate cake with rich liquid fudge center, served with Madagascan vanilla bean gelato.',
@@ -182,7 +182,7 @@ export const MOCK_PRODUCTS = [
     reviews_count: 194
   },
   {
-    id: 'p1000000-0000-0000-0000-000000000062',
+    id: 'a1000000-0000-0000-0000-000000000012',
     category_id: 'c1000000-0000-0000-0000-000000000006',
     name: 'New York Berry Cheesecake',
     description: 'Velvety slow-baked Philadelphia cream cheese on buttery graham crust, topped with macerated wild strawberries.',
@@ -212,7 +212,7 @@ export const MOCK_ORDERS = [
     items: [
       {
         id: 'item-1',
-        product_id: 'p1000000-0000-0000-0000-000000000001',
+        product_id: 'a1000000-0000-0000-0000-000000000001',
         product_name: 'Truffle Umami Smash Burger',
         quantity: 2,
         unit_price: 12.99,
@@ -220,7 +220,7 @@ export const MOCK_ORDERS = [
       },
       {
         id: 'item-2',
-        product_id: 'p1000000-0000-0000-0000-000000000004',
+        product_id: 'a1000000-0000-0000-0000-000000000007',
         product_name: 'Korean Sticky Garlic Wings (8 pcs)',
         quantity: 1,
         unit_price: 10.99,
@@ -244,7 +244,7 @@ export const MOCK_ORDERS = [
     items: [
       {
         id: 'item-3',
-        product_id: 'p1000000-0000-0000-0000-000000000002',
+        product_id: 'a1000000-0000-0000-0000-000000000003',
         product_name: 'Burrata Margherita Pizza',
         quantity: 1,
         unit_price: 15.99,
@@ -252,7 +252,7 @@ export const MOCK_ORDERS = [
       },
       {
         id: 'item-4',
-        product_id: 'p1000000-0000-0000-0000-000000000001',
+        product_id: 'a1000000-0000-0000-0000-000000000001',
         product_name: 'Truffle Umami Smash Burger',
         quantity: 1,
         unit_price: 12.99,
