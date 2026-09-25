@@ -1,0 +1,121 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>About Us — LaVIDA | Food, Made to Crave</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;600;700;800;900&family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  
+  <link rel="stylesheet" href="css/variables.css">
+  <link rel="stylesheet" href="css/base.css">
+  <link rel="stylesheet" href="css/layout.css">
+  <link rel="stylesheet" href="css/components.css">
+  <link rel="stylesheet" href="css/pages.css">
+
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+</head>
+<body>
+
+  <!-- Main Header -->
+  <header class="site-header" id="siteHeader">
+    <div class="container header-container">
+      <a href="index.html" class="brand-logo">
+        <div class="logo-icon">🔥</div>
+        <span>La<span class="logo-accent">VIDA</span></span>
+      </a>
+
+      <nav class="nav-desktop">
+        <a href="index.html" class="nav-link">Home</a>
+        <a href="menu.html" class="nav-link">Menu</a>
+        <a href="about.html" class="nav-link active">About</a>
+        <a href="contact.html" class="nav-link">Contact</a>
+      </nav>
+
+      <div class="header-actions">
+        <button class="header-btn" onclick="window.LaVIDACart.openDrawer()" aria-label="Cart">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <path d="M6 2L3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4z"></path>
+            <line x1="3" y1="6" x2="21" y2="6"></line>
+            <path d="M16 10a4 4 0 0 1-8 0"></path>
+          </svg>
+          <span class="cart-badge-count" style="display:none;">0</span>
+        </button>
+        <div id="headerUserArea">
+          <a href="auth.html" class="btn btn-primary btn-sm">Sign In</a>
+        </div>
+      </div>
+    </div>
+  </header>
+
+  <!-- About Content -->
+  <main class="section-padding">
+    <div class="container">
+      
+      <div style="max-width: 800px; margin: 0 auto 60px; text-align: center;">
+        <span class="badge badge-primary" style="margin-bottom: 8px;">Our Philosophy</span>
+        <h1 style="margin-bottom: 16px;">Food, Made to Crave.</h1>
+        <p class="text-lg">
+          We founded LaVIDA with a singular mission: eliminate complicated, mediocre food menus and deliver uncompromising flavor, freshness, and speed straight to your table.
+        </p>
+      </div>
+
+      <div style="display:grid; grid-template-columns: 1fr 1fr; gap: 40px; align-items:center; margin-bottom: 80px;">
+        <img src="https://images.unsplash.com/photo-1555396273-367ea4eb4db5?w=800&auto=format&fit=crop&q=80" alt="LaVIDA Kitchen Chefs" style="border-radius:28px; box-shadow:var(--shadow-xl);">
+        <div>
+          <span class="badge badge-secondary" style="margin-bottom: 8px;">Scratch Cooking</span>
+          <h2 style="margin-bottom: 16px;">Born From Passion, Mastered in the Kitchen</h2>
+          <p style="margin-bottom: 16px;">
+            Whether it's our 48-hour fermented pizza dough, proprietary dry-aged beef blends, or hand-crushed spice pastes slow-cooked for hours, every recipe on our menu is tested hundreds of times before it earns a place at LaVIDA.
+          </p>
+          <p>
+            No freezer burns. No synthetic fillers. Just vibrant ingredients, fiery grills, and comforting flavors designed for students, families, and food lovers who appreciate real quality.
+          </p>
+        </div>
+      </div>
+
+      <!-- Core Values -->
+      <div class="features-grid">
+        <div class="feature-card">
+          <div class="feature-icon-box">🌱</div>
+          <h4>Ethical Sourcing</h4>
+          <p class="text-sm">We partner with local organic growers and certified humane suppliers for all dairy, poultry, and produce.</p>
+        </div>
+        <div class="feature-card">
+          <div class="feature-icon-box">🔥</div>
+          <h4>Live Fire Cooking</h4>
+          <p class="text-sm">Charcoal grills and stone wood-fired ovens impart authentic smokiness and depth to every single dish.</p>
+        </div>
+        <div class="feature-card">
+          <div class="feature-icon-box">📦</div>
+          <h4>Eco Thermal Packaging</h4>
+          <p class="text-sm">100% biodegradable, insulated food boxes ensure zero soggy fries and keeps your food at restaurant temperature.</p>
+        </div>
+      </div>
+
+    </div>
+  </main>
+
+  <!-- Cart Drawer -->
+  <div class="drawer-backdrop" id="cartBackdrop"></div>
+  <aside class="cart-drawer" id="cartDrawer">
+    <div class="cart-header">
+      <h3>Your Bag</h3>
+      <button class="btn-icon" onclick="window.LaVIDACart.closeDrawer()">✕</button>
+    </div>
+    <div class="cart-items-list" id="cartDrawerItems"></div>
+    <div class="cart-footer" id="cartDrawerFooter"></div>
+  </aside>
+
+  <!-- Footer -->
+  <footer class="site-footer">
+    <div class="container">
+      <div class="footer-bottom">
+        <div>© 2026 LaVIDA Restaurant. All rights reserved.</div>
+      </div>
+    </div>
+  </footer>
+
+</body>
+</html>

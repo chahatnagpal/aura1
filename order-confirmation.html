@@ -1,0 +1,210 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Order Confirmed 🎉 — LaVIDA</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;600;700;800;900&family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  
+  <link rel="stylesheet" href="css/variables.css">
+  <link rel="stylesheet" href="css/base.css">
+  <link rel="stylesheet" href="css/layout.css">
+  <link rel="stylesheet" href="css/components.css">
+  <link rel="stylesheet" href="css/pages.css">
+
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+</head>
+<body>
+
+  <!-- Minimal Header -->
+  <header class="site-header">
+    <div class="container header-container">
+      <a href="index.html" class="brand-logo">
+        <div class="logo-icon">🔥</div>
+        <span>La<span class="logo-accent">VIDA</span></span>
+      </a>
+      <a href="menu.html" class="btn btn-outline btn-sm">Browse Menu</a>
+    </div>
+  </header>
+
+  <!-- Confirmation Main -->
+  <main class="section-padding">
+    <div class="container">
+      <div class="confirmation-container">
+        
+        <div class="confetti-icon">
+          <svg width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+            <polyline points="20 6 9 17 4 12"></polyline>
+          </svg>
+        </div>
+
+        <span class="badge badge-success" style="margin-bottom: 8px;">Order Successfully Placed</span>
+        <h1 style="font-size: 2.2rem; margin-bottom: 8px;">Order Confirmed 🎉</h1>
+        <p>Thank you for ordering with LaVIDA! The kitchen has received your order and our chefs are firing up the grill.</p>
+
+        <!-- Live Order Status Stepper -->
+        <div class="order-stepper" id="orderStatusStepper">
+          <div class="stepper-step completed" id="step-pending">
+            <div class="stepper-icon">1</div>
+            <span class="stepper-label">Received</span>
+          </div>
+          <div class="stepper-step active" id="step-confirmed">
+            <div class="stepper-icon">2</div>
+            <span class="stepper-label">Confirmed</span>
+          </div>
+          <div class="stepper-step" id="step-preparing">
+            <div class="stepper-icon">3</div>
+            <span class="stepper-label">Preparing</span>
+          </div>
+          <div class="stepper-step" id="step-out_for_delivery">
+            <div class="stepper-icon">4</div>
+            <span class="stepper-label">On the Way</span>
+          </div>
+          <div class="stepper-step" id="step-delivered">
+            <div class="stepper-icon">5</div>
+            <span class="stepper-label">Delivered</span>
+          </div>
+        </div>
+
+        <!-- Receipt Card -->
+        <div class="receipt-card" id="receiptCard">
+          <div class="flex justify-between items-center" style="margin-bottom: 16px; padding-bottom: 12px; border-bottom: 1px solid var(--color-light-200);">
+            <div>
+              <span class="text-xs text-muted">Order Number</span>
+              <div style="font-family: var(--font-display); font-size: 1.25rem; font-weight: 800;" id="confOrderId">#ORD-LOADING</div>
+            </div>
+            <button class="btn btn-outline btn-sm" id="btnCopyOrderId" title="Copy Order ID">📋 Copy ID</button>
+          </div>
+
+          <div class="receipt-row">
+            <span class="text-muted">Customer Name:</span>
+            <strong id="confCustomerName">—</strong>
+          </div>
+          <div class="receipt-row">
+            <span class="text-muted">Contact Phone:</span>
+            <span id="confCustomerPhone">—</span>
+          </div>
+          <div class="receipt-row">
+            <span class="text-muted">Delivery Address:</span>
+            <span id="confCustomerAddress" style="max-width: 300px; text-align:right;">—</span>
+          </div>
+          <div class="receipt-row">
+            <span class="text-muted">Payment Method:</span>
+            <span id="confPaymentMethod" class="badge badge-secondary">Cash on Delivery</span>
+          </div>
+          <div class="receipt-row">
+            <span class="text-muted">Estimated Delivery Time:</span>
+            <strong style="color:var(--color-primary);">25–35 mins</strong>
+          </div>
+
+          <!-- Items Ordered Breakdown -->
+          <div style="margin-top: 20px;">
+            <div style="font-size:0.85rem; font-weight:700; margin-bottom:8px;">Ordered Items:</div>
+            <div id="confItemsList" style="display:flex; flex-direction:column; gap:8px; margin-bottom:16px;">
+              <!-- Dynamic items -->
+            </div>
+          </div>
+
+          <!-- Total Due -->
+          <div style="border-top: 1px dashed var(--color-light-300); padding-top: 12px;">
+            <div class="receipt-row">
+              <span class="text-muted">Subtotal:</span>
+              <span id="confSubtotal">$0.00</span>
+            </div>
+            <div class="receipt-row">
+              <span class="text-muted">Delivery Fee:</span>
+              <span id="confDeliveryFee">$0.00</span>
+            </div>
+            <div class="receipt-row" style="font-size:1.15rem; font-weight:800; border:none; padding-top:8px;">
+              <span>Total Due:</span>
+              <span id="confTotal" style="color:var(--color-primary);">$0.00</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- Action CTAs -->
+        <div style="display:flex; justify-content:center; gap:16px; margin-top:32px;">
+          <a href="account.html" class="btn btn-primary btn-lg">View My Orders</a>
+          <a href="index.html" class="btn btn-outline btn-lg">Back to Home</a>
+        </div>
+
+      </div>
+    </div>
+  </main>
+
+  <script type="module">
+    import { getOrderById } from './js/orders.js';
+    import { showToast } from './js/ui.js';
+
+    async function loadConfirmation() {
+      const urlParams = new URLSearchParams(window.location.search);
+      const orderId = urlParams.get('orderId');
+
+      if (!orderId) {
+        window.location.href = 'index.html';
+        return;
+      }
+
+      try {
+        const order = await getOrderById(orderId);
+        if (!order) {
+          showToast('Order not found.', 'danger');
+          return;
+        }
+
+        document.getElementById('confOrderId').textContent = `#${order.id.substring(0, 10).toUpperCase()}`;
+        document.getElementById('confCustomerName').textContent = order.customer_name;
+        document.getElementById('confCustomerPhone').textContent = order.customer_phone;
+        document.getElementById('confCustomerAddress').textContent = order.delivery_address;
+        document.getElementById('confPaymentMethod').textContent = order.payment_method;
+        document.getElementById('confSubtotal').textContent = `$${Number(order.subtotal).toFixed(2)}`;
+        document.getElementById('confDeliveryFee').textContent = Number(order.delivery_fee) === 0 ? 'FREE' : `$${Number(order.delivery_fee).toFixed(2)}`;
+        document.getElementById('confTotal').textContent = `$${Number(order.total).toFixed(2)}`;
+
+        // Copy button
+        document.getElementById('btnCopyOrderId')?.addEventListener('click', () => {
+          navigator.clipboard.writeText(order.id);
+          showToast('Order ID copied to clipboard! 📋', 'info');
+        });
+
+        // Items list
+        const itemsEl = document.getElementById('confItemsList');
+        if (itemsEl && order.items) {
+          itemsEl.innerHTML = order.items.map(item => `
+            <div style="display:flex; justify-content:space-between; font-size:0.85rem; padding-bottom:6px; border-bottom:1px solid var(--color-light-200);">
+              <span>${item.quantity}x ${item.product_name}</span>
+              <strong>$${Number(item.subtotal || item.unit_price * item.quantity).toFixed(2)}</strong>
+            </div>
+          `).join('');
+        }
+
+        // Update Stepper state
+        updateStepper(order.status);
+
+      } catch (err) {
+        console.error('Error loading order confirmation:', err);
+      }
+    }
+
+    function updateStepper(status) {
+      const steps = ['pending', 'confirmed', 'preparing', 'out_for_delivery', 'delivered'];
+      const currentIndex = steps.indexOf(status);
+
+      steps.forEach((stepName, idx) => {
+        const stepEl = document.getElementById(`step-${stepName}`);
+        if (!stepEl) return;
+        stepEl.classList.remove('completed', 'active');
+        if (idx < currentIndex) {
+          stepEl.classList.add('completed');
+        } else if (idx === currentIndex) {
+          stepEl.classList.add('active');
+        }
+      });
+    }
+
+    document.addEventListener('DOMContentLoaded', loadConfirmation);
+  </script>
+</body>
+</html>

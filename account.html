@@ -1,0 +1,265 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>My Account & Orders — LaVIDA</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;600;700;800;900&family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  
+  <link rel="stylesheet" href="css/variables.css">
+  <link rel="stylesheet" href="css/base.css">
+  <link rel="stylesheet" href="css/layout.css">
+  <link rel="stylesheet" href="css/components.css">
+  <link rel="stylesheet" href="css/pages.css">
+
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+</head>
+<body>
+
+  <!-- Header -->
+  <header class="site-header">
+    <div class="container header-container">
+      <a href="index.html" class="brand-logo">
+        <div class="logo-icon">🔥</div>
+        <span>La<span class="logo-accent">VIDA</span></span>
+      </a>
+
+      <nav class="nav-desktop">
+        <a href="index.html" class="nav-link">Home</a>
+        <a href="menu.html" class="nav-link">Menu</a>
+        <a href="about.html" class="nav-link">About</a>
+        <a href="contact.html" class="nav-link">Contact</a>
+      </nav>
+
+      <div class="header-actions">
+        <button class="header-btn" onclick="window.LaVIDACart.openDrawer()" aria-label="Cart">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <path d="M6 2L3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4z"></path>
+            <line x1="3" y1="6" x2="21" y2="6"></line>
+            <path d="M16 10a4 4 0 0 1-8 0"></path>
+          </svg>
+          <span class="cart-badge-count" style="display:none;">0</span>
+        </button>
+        <div id="headerUserArea"></div>
+      </div>
+    </div>
+  </header>
+
+  <!-- Account Main -->
+  <main class="section-padding">
+    <div class="container">
+      <div class="account-layout">
+        
+        <!-- Sidebar Navigation -->
+        <div class="account-sidebar">
+          <div class="account-user-card">
+            <div class="account-avatar-lg" id="accAvatar">U</div>
+            <h3 id="accDisplayName" style="font-size:1.15rem; margin-bottom:4px;">User Name</h3>
+            <p id="accEmail" class="text-xs text-muted">user@example.com</p>
+          </div>
+
+          <div class="account-nav-tabs">
+            <button class="account-tab-btn active" data-tab="orders">
+              <span>🛍️</span> My Orders
+            </button>
+            <button class="account-tab-btn" data-tab="profile">
+              <span>👤</span> Edit Profile
+            </button>
+            <button class="account-tab-btn" id="btnSignOutAccount" style="color:var(--color-danger); margin-top:16px;">
+              <span>🚪</span> Sign Out
+            </button>
+          </div>
+        </div>
+
+        <!-- Tab Content Area -->
+        <div class="account-content">
+          
+          <!-- Orders Tab -->
+          <div id="tabOrders">
+            <div class="flex justify-between items-center" style="margin-bottom: var(--space-6);">
+              <div>
+                <h2>Order History</h2>
+                <p>Track live food prep and view your past cravings</p>
+              </div>
+              <a href="menu.html" class="btn btn-primary btn-sm">+ Crave Something New</a>
+            </div>
+
+            <div id="userOrdersList">
+              <div class="skeleton skeleton-card" style="height: 180px;"></div>
+              <div class="skeleton skeleton-card" style="height: 180px;"></div>
+            </div>
+          </div>
+
+          <!-- Edit Profile Tab -->
+          <div id="tabProfile" style="display: none;">
+            <div style="margin-bottom: var(--space-6);">
+              <h2>Profile Details</h2>
+              <p>Update your contact phone and personal delivery preferences</p>
+            </div>
+
+            <div class="checkout-card" style="max-width: 540px;">
+              <form id="profileForm">
+                <div class="form-group">
+                  <label class="form-label" for="profFullName">Full Name</label>
+                  <input type="text" id="profFullName" class="form-input" required>
+                </div>
+                <div class="form-group">
+                  <label class="form-label" for="profEmail">Email Address</label>
+                  <input type="email" id="profEmail" class="form-input" disabled style="background:var(--color-light-200); cursor:not-allowed;">
+                  <span class="form-help">Email cannot be modified directly.</span>
+                </div>
+                <div class="form-group">
+                  <label class="form-label" for="profPhone">Phone Number</label>
+                  <input type="tel" id="profPhone" class="form-input" placeholder="+1 (555) 000-0000">
+                </div>
+                <button type="submit" class="btn btn-primary" id="btnSaveProfile">Save Changes</button>
+              </form>
+            </div>
+          </div>
+
+        </div>
+
+      </div>
+    </div>
+  </main>
+
+  <!-- Cart Drawer -->
+  <div class="drawer-backdrop" id="cartBackdrop"></div>
+  <aside class="cart-drawer" id="cartDrawer">
+    <div class="cart-header">
+      <h3>Your Bag</h3>
+      <button class="btn-icon" onclick="window.LaVIDACart.closeDrawer()">✕</button>
+    </div>
+    <div class="cart-items-list" id="cartDrawerItems"></div>
+    <div class="cart-footer" id="cartDrawerFooter"></div>
+  </aside>
+
+  <script type="module">
+    import { requireAuth, signOut, updateProfile } from './js/auth.js';
+    import { getUserOrders } from './js/orders.js';
+    import { addToCart } from './js/cart.js';
+    import { showToast } from './js/ui.js';
+
+    let currentUser = null;
+
+    async function initAccount() {
+      currentUser = await requireAuth('auth.html');
+      if (!currentUser) return;
+
+      const profile = currentUser.profile || {};
+      const displayName = profile.full_name || currentUser.email.split('@')[0];
+      const initial = displayName.charAt(0).toUpperCase();
+
+      document.getElementById('accDisplayName').textContent = displayName;
+      document.getElementById('accEmail').textContent = currentUser.email;
+      document.getElementById('accAvatar').textContent = initial;
+
+      document.getElementById('profFullName').value = profile.full_name || '';
+      document.getElementById('profEmail').value = currentUser.email;
+      document.getElementById('profPhone').value = profile.phone || '';
+
+      setupTabs();
+      loadOrders();
+
+      // Sign out
+      document.getElementById('btnSignOutAccount')?.addEventListener('click', async () => {
+        await signOut();
+        showToast('Signed out successfully.', 'info');
+        setTimeout(() => window.location.href = 'index.html', 400);
+      });
+
+      // Profile update
+      document.getElementById('profileForm')?.addEventListener('submit', async (e) => {
+        e.preventDefault();
+        const fullName = document.getElementById('profFullName').value.trim();
+        const phone = document.getElementById('profPhone').value.trim();
+
+        try {
+          await updateProfile({ fullName, phone });
+          showToast('Profile updated successfully!', 'success');
+          document.getElementById('accDisplayName').textContent = fullName;
+        } catch (err) {
+          showToast(err.message, 'danger');
+        }
+      });
+    }
+
+    async function loadOrders() {
+      const listEl = document.getElementById('userOrdersList');
+      if (!listEl) return;
+
+      try {
+        const orders = await getUserOrders(currentUser.id);
+
+        if (orders.length === 0) {
+          listEl.innerHTML = `
+            <div style="background:var(--color-light-50); border:1px solid var(--color-light-200); border-radius:var(--radius-xl); padding:48px 24px; text-align:center;">
+              <div style="font-size:2.5rem; margin-bottom:12px;">🍔</div>
+              <h3>No Orders Placed Yet</h3>
+              <p class="text-muted" style="margin-bottom:16px;">Ready to satisfy your cravings? Explore our signature dishes!</p>
+              <a href="menu.html" class="btn btn-primary btn-sm">Explore Menu</a>
+            </div>
+          `;
+          return;
+        }
+
+        listEl.innerHTML = orders.map(o => `
+          <div class="order-history-card">
+            <div class="order-card-header">
+              <div>
+                <span class="text-xs text-muted">Order ID</span>
+                <div style="font-weight:800; font-size:1rem;">#${o.id.substring(0, 8).toUpperCase()}</div>
+                <span class="text-xs text-muted">${new Date(o.created_at).toLocaleDateString()} • ${new Date(o.created_at).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}</span>
+              </div>
+              <div style="text-align:right;">
+                <span class="status-pill status-${o.status}">${o.status.replace('_', ' ')}</span>
+                <div style="font-family:var(--font-display); font-size:1.15rem; font-weight:800; color:var(--color-primary); margin-top:4px;">
+                  $${Number(o.total).toFixed(2)}
+                </div>
+              </div>
+            </div>
+
+            <!-- Items -->
+            <div style="margin-bottom:16px; font-size:0.85rem; color:var(--text-main);">
+              ${(o.items || []).map(i => `
+                <div style="display:flex; justify-content:space-between; padding:4px 0;">
+                  <span>${i.quantity}x ${i.product_name}</span>
+                  <span class="text-muted">$${Number(i.subtotal || i.unit_price * i.quantity).toFixed(2)}</span>
+                </div>
+              `).join('')}
+            </div>
+
+            <div style="display:flex; justify-content:space-between; align-items:center; border-top:1px solid var(--color-light-200); padding-top:12px;">
+              <span class="text-xs text-muted">📍 ${o.delivery_address}</span>
+              <div style="display:flex; gap:8px;">
+                <a href="order-confirmation.html?orderId=${o.id}" class="btn btn-outline btn-sm">Track Progress</a>
+              </div>
+            </div>
+          </div>
+        `).join('');
+
+      } catch (err) {
+        listEl.innerHTML = `<p class="text-danger">Failed to load orders: ${err.message}</p>`;
+      }
+    }
+
+    function setupTabs() {
+      const tabBtns = document.querySelectorAll('.account-tab-btn[data-tab]');
+      tabBtns.forEach(btn => {
+        btn.addEventListener('click', () => {
+          tabBtns.forEach(b => b.classList.remove('active'));
+          btn.classList.add('active');
+
+          const tab = btn.getAttribute('data-tab');
+          document.getElementById('tabOrders').style.display = tab === 'orders' ? 'block' : 'none';
+          document.getElementById('tabProfile').style.display = tab === 'profile' ? 'block' : 'none';
+        });
+      });
+    }
+
+    document.addEventListener('DOMContentLoaded', initAccount);
+  </script>
+</body>
+</html>
